@@ -66,7 +66,6 @@
         "--enable-gnutls",
         "--disable-doc",
         "--disable-programs",
-        "--disable-muxers",
         "--disable-devices"
       ],
       "sources": [
