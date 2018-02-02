@@ -13,11 +13,13 @@
     "--device=all",
     "--share=network",
     "--share=ipc",
+    "--filesystem=xdg-run/obs-gnome-screencast:create",
     "--talk-name=org.kde.StatusNotifierWatcher",
     "--talk-name=org.freedesktop.ScreenSaver",
     "--talk-name=org.freedesktop.PowerManagement.Inhibit",
     "--talk-name=org.mate.SessionManager",
-    "--talk-name=org.gnome.SessionManager"
+    "--talk-name=org.gnome.SessionManager",
+    "--talk-name=org.gnome.Shell.Screencast"
   ],
   "modules": [
     "shared-modules/udev/udev-175.json",
@@ -28,8 +30,21 @@
       "sources": [
         {
           "type": "archive",
-          "url": "http://download.videolan.org/pub/x264/snapshots/x264-snapshot-20140212-2245-stable.tar.bz2",
-          "sha256": "5d98e9e4faf6dd55e7193ed379aff477b8acbda6777758956ef7e5f05067be18"
+          "url": "https://download.videolan.org/pub/x264/snapshots/x264-snapshot-20180201-2245-stable.tar.bz2",
+          "sha256": "a90abec9c9c4163442b2d2276d40575f7aac47c63138f8e4557ceb6bd5d3391d"
+        }
+      ],
+      "modules": [
+        {
+          "name": "nasm",
+          "cleanup": ["*"],
+          "sources": [
+            {
+              "type": "archive",
+              "url": "http://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.xz",
+              "sha256": "8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757"
+            }
+          ]
         }
       ]
     },
@@ -58,15 +73,37 @@
       ]
     },
     {
+      "name": "fdk-aac",
+      "config-opts": ["--disable-static"],
+      "cleanup": [
+        "/include",
+        "/lib/pkgconfig",
+        "/share/man",
+        "*.la"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/mstorsjo/fdk-aac/archive/v0.1.5.tar.gz",
+          "sha256": "ff53d1d01cacc29c071e23192dfefa93bdbeaf775fc5d296259b4859d0306b79"
+        }
+      ]
+    },
+    {
       "name": "ffmpeg",
       "cleanup": [ "/include", "/lib/pkgconfig", "/share/ffmpeg" ],
       "config-opts": [
+        "--enable-gpl",
+        "--enable-nonfree",
         "--enable-shared",
         "--disable-static",
         "--enable-gnutls",
         "--disable-doc",
         "--disable-programs",
-        "--disable-devices"
+        "--disable-devices",
+        "--enable-libopus",
+        "--enable-libfdk-aac",
+        "--enable-nvenc"
       ],
       "sources": [
         {
@@ -149,6 +186,22 @@
         {
           "type": "shell",
           "commands": [ "sed -i s/luajit-2.0/luajit-2.1/g cmake/Modules/FindLuajit.cmake" ]
+        }
+      ]
+    },
+    {
+      "name": "obs-gnome-screencast",
+      "buildsystem": "meson",
+      "config-opts": ["--buildtype=release"],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.5.tar.gz",
+          "sha256": "4b98dc0695ef81dc2b01227d6a00b918bdf6f9f97788bd1e4c1029f29b0006c8"
+        },
+        {
+          "type": "patch",
+          "path": "obs-gnome-screenshot-xdg-run.patch"
         }
       ]
     }
