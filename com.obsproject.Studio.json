@@ -203,8 +203,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.7.tar.gz",
-          "sha256": "82b1f753a8a7be1a50d3419712c5ba73a29c9db22a57f30269a8ab7a30ffa77e"
+          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.5.tar.gz",
+          "sha256": "4b98dc0695ef81dc2b01227d6a00b918bdf6f9f97788bd1e4c1029f29b0006c8"
         },
         {
           "type": "patch",
