@@ -179,8 +179,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/jp9000/obs-studio/archive/21.0.1.tar.gz",
-          "sha256": "c43ecf9f36f52157371650b6fcbd1e66cde1ca2465b7348fa66dfd211258a662"
+          "url": "https://github.com/jp9000/obs-studio/archive/21.0.3.tar.gz",
+          "sha256": "eabd1e0bced6f58182ad5d4f304fc18d0bd9a9fca45535a0ebc2fd560fb903cd"
         },
         {
           "type": "file",
