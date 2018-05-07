@@ -2,7 +2,7 @@
   "app-id": "com.obsproject.Studio",
   "branch": "stable",
   "runtime": "org.kde.Platform",
-  "runtime-version": "5.9",
+  "runtime-version": "5.10",
   "sdk": "org.kde.Sdk",
   "command": "obs",
   "rename-icon": "obs",
@@ -179,8 +179,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/jp9000/obs-studio/archive/21.0.3.tar.gz",
-          "sha256": "eabd1e0bced6f58182ad5d4f304fc18d0bd9a9fca45535a0ebc2fd560fb903cd"
+          "url": "https://github.com/obsproject/obs-studio/archive/21.1.0.tar.gz",
+          "sha256": "58c69b5982cf26d561db668e079f9d9a78e99977cbe047e3113b2d5bea6c64c9"
         },
         {
           "type": "file",
@@ -203,8 +203,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.7.tar.gz",
-          "sha256": "82b1f753a8a7be1a50d3419712c5ba73a29c9db22a57f30269a8ab7a30ffa77e"
+          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.8.tar.gz",
+          "sha256": "3cd676e6a2a3de065c7f903a16e64694bcc5408217ca707aeb7e0a72e5ac42c9"
         }
       ]
     }
