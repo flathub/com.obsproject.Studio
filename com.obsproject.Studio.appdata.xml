@@ -3,10 +3,20 @@
   <id>com.obsproject.Studio.desktop</id>
   <name>OBS Studio</name>
   <developer_name>OBS Project</developer_name>
-  <summary>Live streaming and video recording software</summary>
-  <description>
-    <p>Free and open source software for video recording and live streaming</p>
-  </description>
+  <summary>Share your games, art and entertainment with the world</summary>
+  <summary xml:lang="pt_BR">Compartilhe seus jogos, arte e entretenimento com o mundo</summary>
+  <summary xml:lang="es">Comparte tus partidas, arte y entretenimiento con el mundo</summary>
+  <summary xml:lang="fr">Partagez votre jeu, l’art et le divertissement avec le monde</summary>
+  <summary xml:lang="eu">Partekatu munduarekin zure jolasak, arte-lanak eta denbora-pasak</summary>
+  <summary xml:lang="zh_CN">与世界分享你的游戏，艺术以及娱乐</summary>
+  <summary xml:lang="da">Del din gaming, kunst og underholdning med verden</summary>
+  <description><p>Free and open source software for video recording and live streaming.</p></description>
+  <description xml:lang="pt_BR"><p>Software livre e de código aberto para gravação de vídeo e transmissão em tempo real.</p></description>
+  <description xml:lang="es"><p>Software libre y de código abierto para grabación de video y transmisión en vivo.</p></description>
+  <description xml:lang="fr"><p>Logiciel gratuit et open source pour enregistrer et faire des lives.</p></description>
+  <description xml:lang="eu"><p>Bideo grabazioak eta zuzeneko transmisioak egiteko software libre eta irekia.</p></description>
+  <description xml:lang="zh_CN"><p>免费且开源的用于视频录制以及直播串流的软件</p></description>
+  <description xml:lang="da"><p>Gratis, Open Source-software til videooptagelse og live streaming.</p></description>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-2.0</project_license>
   <url type="homepage">https://obsproject.com</url>
