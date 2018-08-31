@@ -93,6 +93,19 @@
       ]
     },
     {
+      "name": "nv-codec-headers",
+      "cleanup": ["*"],
+      "no-autogen": true,
+      "make-install-args": ["PREFIX=/app"],
+      "sources": [
+        {
+          "type": "git",
+          "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
+          "commit": "e6f3a414a599529ce5da0863f3e060c19c8a19ce"
+        }
+      ]
+    },
+    {
       "name": "ffmpeg",
       "cleanup": [ "/include", "/lib/pkgconfig", "/share/ffmpeg" ],
       "config-opts": [
@@ -111,8 +124,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://ffmpeg.org/releases/ffmpeg-3.4.2.tar.xz",
-          "sha256": "2b92e9578ef8b3e49eeab229e69305f5f4cbc1fdaa22e927fc7fca18acccd740"
+          "url": "https://ffmpeg.org/releases/ffmpeg-4.0.2.tar.xz",
+          "sha256": "a95c0cc9eb990e94031d2183f2e6e444cc61c99f6f182d1575c433d62afb2f97"
         }
       ]
     },
@@ -179,8 +192,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/jp9000/obs-studio/archive/21.0.3.tar.gz",
-          "sha256": "eabd1e0bced6f58182ad5d4f304fc18d0bd9a9fca45535a0ebc2fd560fb903cd"
+          "url": "https://github.com/jp9000/obs-studio/archive/22.0.2.tar.gz",
+          "sha256": "8712becf41f6e4b801aeaea0ab2c3ec98da3356c60853971d0a9730d3281cebe"
         },
         {
           "type": "file",
