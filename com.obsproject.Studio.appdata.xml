@@ -3,13 +3,16 @@
   <id>com.obsproject.Studio.desktop</id>
   <name>OBS Studio</name>
   <developer_name>OBS Project</developer_name>
-  <summary>Live streaming and video recording software</summary>
-  <description>
-    <p>Free and open source software for video recording and live streaming</p>
-  </description>
-  <metadata_license>CC0-1.0</metadata_license>
+  <summary>Share your games, art and entertainment with the world</summary>
+  <summary xml:lang="pt_BR">Compartilhe seus jogos, arte e entretenimento com o mundo</summary>
+  <summary xml:lang="es">Comparte tus partidas, arte y entretenimiento con el mundo</summary>
+  <description><p>Free and open source software for video recording and live streaming.</p></description>
+  <description xml:lang="pt_BR"><p>Software livre e de código aberto para gravação de vídeo e transmissão em tempo real.</p></description>
+  <description xml:lang="es"><p>Software libre y de código abierto para grabación de video y transmisión en vivo.</p></description>
   <project_license>GPL-2.0</project_license>
   <url type="homepage">https://obsproject.com</url>
+  <url type="homepage" xml:lang="pt_BR">https://obsproject.com/pt-br</url>
+  <url type="homepage" xml:lang="es">https://obsproject.com/es</url>
   <screenshots>
     <screenshot type="default">
       <image type="source">https://i.imgur.com/QefUtE5.png</image>
