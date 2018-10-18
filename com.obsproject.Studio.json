@@ -2,7 +2,7 @@
   "app-id": "com.obsproject.Studio",
   "branch": "stable",
   "runtime": "org.kde.Platform",
-  "runtime-version": "5.9",
+  "runtime-version": "5.11",
   "sdk": "org.kde.Sdk",
   "command": "obs",
   "rename-icon": "obs",
@@ -119,6 +119,8 @@
         "--disable-programs",
         "--disable-devices",
         "--enable-libopus",
+        "--enable-libvpx",
+        "--enable-libvorbis",
         "--enable-libfdk-aac",
         "--enable-nvenc"
       ],
@@ -217,8 +219,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.7.tar.gz",
-          "sha256": "82b1f753a8a7be1a50d3419712c5ba73a29c9db22a57f30269a8ab7a30ffa77e"
+          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.9.tar.gz",
+          "sha256": "e2599e30ad55e1fcb2abed85df29630045397fd532dee8aa61f97ce05afb5186"
         }
       ]
     }
