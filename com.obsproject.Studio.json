@@ -194,9 +194,10 @@
       ],
       "sources": [
         {
-          "type": "archive",
-          "url": "https://github.com/jp9000/obs-studio/archive/22.0.2.tar.gz",
-          "sha256": "8712becf41f6e4b801aeaea0ab2c3ec98da3356c60853971d0a9730d3281cebe"
+          "type": "git",
+          "url": "https://github.com/obsproject/obs-studio.git",
+          "tag": "22.0.3",
+          "commit": "6523a293b26afcc647d62fe39f0f7d959320ad12"
         },
         {
           "type": "file",
