@@ -1,0 +1,29 @@
+{
+  "id": "com.obsproject.Studio.BlackMagicLibs",
+  "branch": "stable",
+  "runtime": "com.obsproject.Studio",
+  "runtime-version": "stable",
+  "sdk": "org.kde.Platform//5.11",
+  "build-extension": true,
+  "separate-locales": false,
+  "appstream-compose": false,
+  "modules": [
+    {
+      "name": "blackmagic",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -Dm644 --target-directory=$FLATPAK_DEST *.so"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "path": "libDeckLinkAPI.so"
+        },
+        {
+          "type": "file",
+          "path": "libDeckLinkPreviewAPI.so"
+        }
+      ]
+    }
+  ]
+}
