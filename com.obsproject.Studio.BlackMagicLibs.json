@@ -13,7 +13,7 @@
       "buildsystem": "simple",
       "build-commands": [
         "tar -xf other/x86_64/desktopvideo-10.11.4a9-x86_64.tar.gz",
-        "install -Dm644 --target-directory=$FLATPAK_DEST desktopvideo-10.11.4a9-x86_64/usr/lib/*.so"
+        "install -Dm644 --target-directory=$FLATPAK_DEST desktopvideo-10.11.4a9-x86_64/usr/lib/{*.so,blackmagic/DesktopVideo/libc++*.so.1}"
       ],
       "sources": [
         {
