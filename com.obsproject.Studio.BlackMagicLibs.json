@@ -12,16 +12,13 @@
       "name": "blackmagic",
       "buildsystem": "simple",
       "build-commands": [
-        "install -Dm644 --target-directory=$FLATPAK_DEST *.so"
+        "tar -xf other/x86_64/desktopvideo-10.11.4a9-x86_64.tar.gz",
+        "install -Dm644 --target-directory=$FLATPAK_DEST desktopvideo-10.11.4a9-x86_64/usr/lib/*.so"
       ],
       "sources": [
         {
-          "type": "file",
-          "path": "libDeckLinkAPI.so"
-        },
-        {
-          "type": "file",
-          "path": "libDeckLinkPreviewAPI.so"
+          "type": "archive",
+          "path": "Blackmagic_Desktop_Video_Linux_10.11.4.tar.gz"
         }
       ]
     }
