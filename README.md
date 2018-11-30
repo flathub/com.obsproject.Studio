@@ -1,1 +1,1 @@
-Please see the [wiki](/wiki) for extra configuration such as [BlackMagic](/wiki/BlackMagic-Support) or [NVENC](/wiki/NVENC-Support) support.
+Please see the [wiki](https://github.com/flathub/com.obsproject.Studio/wiki) for extra configuration such as [BlackMagic](https://github.com/flathub/com.obsproject.Studio/wiki/BlackMagic-Support) or [NVENC](https://github.com/flathub/com.obsproject.Studio/wiki/NVENC-Support) support.
