@@ -218,7 +218,7 @@
         },
         {
           "type": "shell",
-          "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.9\"/' libobs/obs-nix.c" ]
+          "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.11\"/' libobs/obs-nix.c" ]
         }
       ]
     },
