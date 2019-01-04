@@ -2,7 +2,7 @@
   "app-id": "com.obsproject.Studio",
   "branch": "stable",
   "runtime": "org.kde.Platform",
-  "runtime-version": "5.11",
+  "runtime-version": "5.12",
   "sdk": "org.kde.Sdk",
   "command": "obs",
   "rename-icon": "obs",
@@ -44,19 +44,6 @@
           "type": "archive",
           "url": "https://download.videolan.org/pub/x264/snapshots/x264-snapshot-20180201-2245-stable.tar.bz2",
           "sha256": "a90abec9c9c4163442b2d2276d40575f7aac47c63138f8e4557ceb6bd5d3391d"
-        }
-      ],
-      "modules": [
-        {
-          "name": "nasm",
-          "cleanup": ["*"],
-          "sources": [
-            {
-              "type": "archive",
-              "url": "http://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.xz",
-              "sha256": "8ac3235f49a6838ff7a8d7ef7c19a4430d0deecc0c2d3e3e237b5e9f53291757"
-            }
-          ]
         }
       ]
     },
@@ -218,7 +205,7 @@
         },
         {
           "type": "shell",
-          "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.11\"/' libobs/obs-nix.c" ]
+          "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.12\"/' libobs/obs-nix.c" ]
         }
       ]
     },
