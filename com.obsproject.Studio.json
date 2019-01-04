@@ -42,8 +42,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://download.videolan.org/pub/x264/snapshots/x264-snapshot-20180201-2245-stable.tar.bz2",
-          "sha256": "a90abec9c9c4163442b2d2276d40575f7aac47c63138f8e4557ceb6bd5d3391d"
+          "url": "https://download.videolan.org/pub/x264/snapshots/x264-snapshot-20190104-2245-stable.tar.bz2",
+          "sha256": "969cd43e69ba4bc5b293392d616ac8b15cbc9ece3083c58001ff0d592cc74bcf"
         }
       ]
     },
@@ -66,8 +66,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.12.5.tar.bz2",
-          "sha256": "0618162ddb0b57fe7c45407d4d66ed79e3a134cdbc9e72598d34e61d3359e20d"
+          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.3.tar.bz2",
+          "sha256": "7c5c0d49c130cf65d384f28e9f3a53c5f7d17bf18740c48c40810e0fbbed5b54"
         }
       ]
     },
@@ -97,7 +97,7 @@
         {
           "type": "git",
           "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
-          "commit": "e6f3a414a599529ce5da0863f3e060c19c8a19ce"
+          "commit": "40e7dd3f646f303e584da1951a4840414a0ace4d"
         }
       ]
     },
@@ -122,8 +122,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://ffmpeg.org/releases/ffmpeg-4.0.2.tar.xz",
-          "sha256": "a95c0cc9eb990e94031d2183f2e6e444cc61c99f6f182d1575c433d62afb2f97"
+          "url": "https://ffmpeg.org/releases/ffmpeg-4.1.tar.xz",
+          "sha256": "a38ec4d026efb58506a99ad5cd23d5a9793b4bf415f2c4c2e9c1bb444acd1994"
         }
       ]
     },
@@ -138,8 +138,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "http://luajit.org/download/LuaJIT-2.1.0-beta2.tar.gz",
-          "sha256": "713924ca034b9d99c84a0b7b701794c359ffb54f8e3aa2b84fad52d98384cf47"
+          "url": "http://luajit.org/download/LuaJIT-2.1.0-beta3.tar.gz",
+          "sha256": "1ad2e34b111c802f9d0cdf019e986909123237a28c746b21295b63c9e785d9c3"
         },
         {
           "type": "shell",
