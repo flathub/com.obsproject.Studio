@@ -5,8 +5,6 @@
   "runtime-version": "5.12",
   "sdk": "org.kde.Sdk",
   "command": "obs",
-  "rename-icon": "obs",
-  "rename-desktop-file": "obs.desktop",
   "finish-args": [
     "--socket=x11",
     "--socket=wayland",
@@ -122,8 +120,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://ffmpeg.org/releases/ffmpeg-4.1.tar.xz",
-          "sha256": "a38ec4d026efb58506a99ad5cd23d5a9793b4bf415f2c4c2e9c1bb444acd1994"
+          "url": "https://www.ffmpeg.org/releases/ffmpeg-4.1.3.tar.xz",
+          "sha256": "0c3020452880581a8face91595b239198078645e7d7184273b8bcc7758beb63d"
         }
       ]
     },
@@ -185,19 +183,14 @@
         "-DDISABLE_JACK=1"
       ],
       "post-install": [
-        "install -Dm644 com.obsproject.Studio.appdata.xml /app/share/appdata/com.obsproject.Studio.appdata.xml",
         "install -d /app/lib/blackmagic"
       ],
       "sources": [
         {
           "type": "git",
           "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "23.1.0",
-          "commit": "6550c0dfaaf3b02da6c58bcdde7735682daf2dce"
-        },
-        {
-          "type": "file",
-          "path": "com.obsproject.Studio.appdata.xml"
+          "tag": "23.2.1",
+          "commit": "02e523c125e20291adc6118419a5c9e78115e75c"
         },
         {
           "type": "shell",
@@ -216,8 +209,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.9.tar.gz",
-          "sha256": "e2599e30ad55e1fcb2abed85df29630045397fd532dee8aa61f97ce05afb5186"
+          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.10.tar.gz",
+          "sha256": "f452670c0ffee3b08296370e7cfe6ac2b442588942b96c78e0b1bf05f09b6e49"
         }
       ]
     }
