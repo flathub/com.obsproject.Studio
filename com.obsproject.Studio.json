@@ -32,7 +32,6 @@
     }
   },
   "modules": [
-    "shared-modules/udev/udev-175.json",
     {
       "name": "x264",
       "cleanup": ["/bin", "/include", "/lib/pkgconfig", "/lib/*.la"],
