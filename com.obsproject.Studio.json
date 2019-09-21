@@ -64,8 +64,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.3.tar.bz2",
-          "sha256": "7c5c0d49c130cf65d384f28e9f3a53c5f7d17bf18740c48c40810e0fbbed5b54"
+          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.7.tar.bz2",
+          "sha256": "ee917a7e1af72c60c0532d9fdb9e48baf641d427aa7b009a9b2ca821f9e8e0d9"
         }
       ]
     },
