@@ -94,7 +94,8 @@
         {
           "type": "git",
           "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
-          "commit": "40e7dd3f646f303e584da1951a4840414a0ace4d"
+          "commit": "9fdaf11b8f79d4e41cde9af89656238f25fec6fd",
+          "tag": "n9.0.18.2"
         }
       ]
     },
@@ -119,8 +120,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "http://www.ffmpeg.org/releases/ffmpeg-4.1.4.tar.xz",
-          "sha256": "f1f049a82fcfbf156564e73a3935d7e750891fab2abf302e735104fd4050a7e1"
+          "url": "https://www.ffmpeg.org/releases/ffmpeg-4.2.1.tar.xz",
+          "sha256": "cec7c87e9b60d174509e263ac4011b522385fd0775292e1670ecc1180c9bb6d4"
         }
       ]
     },
