@@ -12,7 +12,7 @@
     "--device=all",
     "--share=network",
     "--share=ipc",
-    "--filesystem=xdg-run/obs-gnome-screencast:create",
+    "--filesystem=xdg-run/obs-xdg-portal:create",
     "--filesystem=host",
     "--talk-name=org.kde.StatusNotifierWatcher",
     "--talk-name=org.freedesktop.ScreenSaver",
@@ -20,7 +20,6 @@
     "--talk-name=org.freedesktop.Notifications",
     "--talk-name=org.mate.SessionManager",
     "--talk-name=org.gnome.SessionManager",
-    "--talk-name=org.gnome.Shell.Screencast",
     "--own-name=org.kde.StatusNotifierItem-2-2"
   ],
   "add-extensions": {
@@ -203,14 +202,14 @@
       ]
     },
     {
-      "name": "obs-gnome-screencast",
+      "name": "obs-xdg-portal",
       "buildsystem": "meson",
       "config-opts": ["--buildtype=release"],
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/fzwoch/obs-gnome-screencast/archive/v0.0.10.tar.gz",
-          "sha256": "f452670c0ffee3b08296370e7cfe6ac2b442588942b96c78e0b1bf05f09b6e49"
+          "url": "https://gitlab.gnome.org/feaneron/obs-xdg-portal/-/archive/0.1.2/obs-xdg-portal-0.1.2.tar.gz",
+          "sha256": "ef0c72680a58e8bf30c6bbc6c3daf163031c6dfc2b0c01a3b2b26fc995db145e"
         }
       ]
     }
