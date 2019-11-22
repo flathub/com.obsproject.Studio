@@ -20,7 +20,9 @@
     "--talk-name=org.freedesktop.Notifications",
     "--talk-name=org.mate.SessionManager",
     "--talk-name=org.gnome.SessionManager",
-    "--own-name=org.kde.StatusNotifierItem-2-2"
+    "--own-name=org.kde.StatusNotifierItem-2-2",
+    /* https://github.com/obsproject/obs-studio/pull/2097 */
+    "--env=QT_QPA_PLATFORM=xcb"
   ],
   "add-extensions": {
     "com.obsproject.Studio.BlackMagicLibs": {
