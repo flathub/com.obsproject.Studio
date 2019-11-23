@@ -7,7 +7,6 @@
   "command": "obs",
   "finish-args": [
     "--socket=x11",
-    "--socket=wayland",
     "--socket=pulseaudio",
     "--device=all",
     "--share=network",
@@ -20,9 +19,7 @@
     "--talk-name=org.freedesktop.Notifications",
     "--talk-name=org.mate.SessionManager",
     "--talk-name=org.gnome.SessionManager",
-    "--own-name=org.kde.StatusNotifierItem-2-2",
-    /* see upstream PR 2097 for wayland support */
-    "--env=QT_QPA_PLATFORM=xcb"
+    "--own-name=org.kde.StatusNotifierItem-2-2"
   ],
   "add-extensions": {
     "com.obsproject.Studio.BlackMagicLibs": {
