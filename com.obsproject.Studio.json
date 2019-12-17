@@ -172,7 +172,8 @@
         "-DUNIX_STRUCTURE=1",
         "-DUSE_XDG=1",
         "-DDISABLE_ALSA=1",
-        "-DDISABLE_JACK=1"
+        "-DDISABLE_JACK=1",
+        "-DOBS_VERSION_OVERRIDE=24.0.5"
       ],
       "post-install": [
         "install -d /app/lib/blackmagic"
