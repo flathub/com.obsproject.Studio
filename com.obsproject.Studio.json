@@ -183,14 +183,6 @@
           "url": "https://github.com/obsproject/obs-studio.git",
           "tag": "24.0.5",
           "commit": "99638ba69782bdb10531a305093bbd25e5d3baef"
-        },
-        {
-          "type": "shell",
-          "commands": [ "sed -i s/luajit-2.0/luajit-2.1/g cmake/Modules/FindLuajit.cmake" ]
-        },
-        {
-          "type": "shell",
-          "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.12\"/' libobs/obs-nix.c" ]
         }
       ]
     },
