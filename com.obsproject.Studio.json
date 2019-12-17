@@ -29,11 +29,23 @@
       "autodelete": true
     }
   },
+  "cleanup": [
+    "/include",
+    "/lib/cmake",
+    "/lib/pkgconfig",
+    "/share/man",
+    "*.la",
+    "*.a"
+  ],
   "modules": [
     {
       "name": "x264",
-      "cleanup": ["/bin", "/include", "/lib/pkgconfig", "/lib/*.la"],
-      "config-opts": ["--enable-shared", "--enable-pic", "--disable-lavf"],
+      "config-opts": [
+        "--enable-shared",
+        "--enable-pic",
+        "--disable-lavf",
+        "--disable-cli"
+      ],
       "sources": [
         {
           "type": "archive",
@@ -52,12 +64,6 @@
         "--disable-qv4l2",
         "--with-udevdir=/app/lib/udev/"
       ],
-      "cleanup": [
-        "/include",
-        "/lib/pkgconfig",
-        "/share/man",
-        "*.la"
-      ],
       "sources": [
         {
           "type": "archive",
@@ -68,12 +74,8 @@
     },
     {
       "name": "fdk-aac",
-      "config-opts": ["--disable-static"],
-      "cleanup": [
-        "/include",
-        "/lib/pkgconfig",
-        "/share/man",
-        "*.la"
+      "config-opts": [
+        "--disable-static"
       ],
       "sources": [
         {
@@ -99,7 +101,6 @@
     },
     {
       "name": "ffmpeg",
-      "cleanup": [ "/include", "/lib/pkgconfig", "/share/ffmpeg" ],
       "config-opts": [
         "--enable-gpl",
         "--enable-nonfree",
@@ -127,9 +128,7 @@
       "name": "luajit",
       "no-autogen": true,
       "cleanup": [
-        "/bin", "/lib/*.a",
-        "/include", "/lib/pkgconfig",
-        "/share/man"
+        "/bin"
       ],
       "sources": [
         {
@@ -155,8 +154,7 @@
           "--with-python3"
         ],
         "cleanup": [
-          "/bin",
-          "/share/swig"
+          "*"
         ],
         "sources": [
             {
@@ -169,10 +167,6 @@
     {
       "name": "obs",
       "buildsystem": "cmake-ninja",
-      "cleanup": [
-        "/include",
-        "/lib/cmake"
-      ],
       "config-opts": [
         "-DCMAKE_BUILD_TYPE=Release",
         "-DUNIX_STRUCTURE=1",
