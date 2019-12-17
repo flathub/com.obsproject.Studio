@@ -187,8 +187,8 @@
         {
           "type": "git",
           "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "24.0.3",
-          "commit": "d88a5a5a60bcdcbdde6d5dc54dc352ae8d431070"
+          "tag": "24.0.5",
+          "commit": "99638ba69782bdb10531a305093bbd25e5d3baef"
         },
         {
           "type": "shell",
