@@ -3,7 +3,7 @@
   "branch": "stable",
   "runtime": "com.obsproject.Studio",
   "runtime-version": "stable",
-  "sdk": "org.kde.Platform//5.13",
+  "sdk": "org.kde.Platform//5.14",
   "build-extension": true,
   "separate-locales": false,
   "appstream-compose": false,

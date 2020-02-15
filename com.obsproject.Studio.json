@@ -2,7 +2,7 @@
   "app-id": "com.obsproject.Studio",
   "default-branch": "stable",
   "runtime": "org.kde.Platform",
-  "runtime-version": "5.13",
+  "runtime-version": "5.14",
   "sdk": "org.kde.Sdk",
   "command": "obs",
   "finish-args": [
@@ -36,9 +36,9 @@
       "config-opts": ["--enable-shared", "--enable-pic", "--disable-lavf"],
       "sources": [
         {
-          "type": "archive",
-          "url": "https://download.videolan.org/pub/x264/snapshots/x264-snapshot-20190104-2245-stable.tar.bz2",
-          "sha256": "969cd43e69ba4bc5b293392d616ac8b15cbc9ece3083c58001ff0d592cc74bcf"
+          "type": "git",
+          "url": "https://code.videolan.org/videolan/x264.git",
+          "commit": "1771b556ee45207f8711744ccbd5d42a3949b14c"
         }
       ]
     },
@@ -61,8 +61,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.7.tar.bz2",
-          "sha256": "ee917a7e1af72c60c0532d9fdb9e48baf641d427aa7b009a9b2ca821f9e8e0d9"
+          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.8.tar.bz2",
+          "sha256": "84346bf200bd30efb8a80a65ded1b81d39ae7e0ff2272e98f478b4eee8f40d13"
         }
       ]
     },
@@ -78,8 +78,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://github.com/mstorsjo/fdk-aac/archive/v0.1.5.tar.gz",
-          "sha256": "ff53d1d01cacc29c071e23192dfefa93bdbeaf775fc5d296259b4859d0306b79"
+          "url": "https://github.com/mstorsjo/fdk-aac/archive/v2.0.1.tar.gz",
+          "sha256": "a4142815d8d52d0e798212a5adea54ecf42bcd4eec8092b37a8cb615ace91dc6"
         }
       ]
     },
@@ -92,8 +92,8 @@
         {
           "type": "git",
           "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
-          "commit": "9fdaf11b8f79d4e41cde9af89656238f25fec6fd",
-          "tag": "n9.0.18.2"
+          "commit": "aaac5dfd2f6beac704e3ff944abd3ef60a322e3b",
+          "tag": "n9.0.18.3"
         }
       ]
     },
@@ -118,8 +118,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://www.ffmpeg.org/releases/ffmpeg-4.2.1.tar.xz",
-          "sha256": "cec7c87e9b60d174509e263ac4011b522385fd0775292e1670ecc1180c9bb6d4"
+          "url": "https://www.ffmpeg.org/releases/ffmpeg-4.2.2.tar.xz",
+          "sha256": "cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c"
         }
       ]
     },
@@ -161,8 +161,8 @@
         "sources": [
             {
                 "type": "archive",
-                "url": "http://prdownloads.sourceforge.net/swig/swig-3.0.12.tar.gz",
-                "sha256": "7cf9f447ae7ed1c51722efc45e7f14418d15d7a1e143ac9f09a668999f4fc94d"
+                "url": "https://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz",
+                "sha256": "7a00b4d0d53ad97a14316135e2d702091cd5f193bb58bcfcd8bc59d41e7887a9"
             }
         ]
     },
@@ -187,8 +187,8 @@
         {
           "type": "git",
           "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "24.0.3",
-          "commit": "d88a5a5a60bcdcbdde6d5dc54dc352ae8d431070"
+          "tag": "24.0.5",
+          "commit": "99638ba69782bdb10531a305093bbd25e5d3baef"
         },
         {
           "type": "shell",
@@ -196,7 +196,7 @@
         },
         {
           "type": "shell",
-          "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.12\"/' libobs/obs-nix.c" ]
+          "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.14\"/' libobs/obs-nix.c" ]
         }
       ]
     },
