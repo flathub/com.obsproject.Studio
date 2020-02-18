@@ -94,7 +94,6 @@
         "--enable-libopus",
         "--enable-libvpx",
         "--enable-libvorbis",
-        "--enable-libfdk-aac",
         "--enable-nvenc"
       ],
       "sources": [
