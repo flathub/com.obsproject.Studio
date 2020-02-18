@@ -67,23 +67,6 @@
       ]
     },
     {
-      "name": "fdk-aac",
-      "config-opts": ["--disable-static"],
-      "cleanup": [
-        "/include",
-        "/lib/pkgconfig",
-        "/share/man",
-        "*.la"
-      ],
-      "sources": [
-        {
-          "type": "archive",
-          "url": "https://github.com/mstorsjo/fdk-aac/archive/v2.0.1.tar.gz",
-          "sha256": "a4142815d8d52d0e798212a5adea54ecf42bcd4eec8092b37a8cb615ace91dc6"
-        }
-      ]
-    },
-    {
       "name": "nv-codec-headers",
       "cleanup": ["*"],
       "no-autogen": true,
@@ -102,7 +85,6 @@
       "cleanup": [ "/include", "/lib/pkgconfig", "/share/ffmpeg" ],
       "config-opts": [
         "--enable-gpl",
-        "--enable-nonfree",
         "--enable-shared",
         "--disable-static",
         "--enable-gnutls",
@@ -112,7 +94,6 @@
         "--enable-libopus",
         "--enable-libvpx",
         "--enable-libvorbis",
-        "--enable-libfdk-aac",
         "--enable-nvenc"
       ],
       "sources": [
