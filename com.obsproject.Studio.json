@@ -178,6 +178,10 @@
         {
           "type": "shell",
           "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.14\"/' libobs/obs-nix.c" ]
+        },
+        {
+          "type": "patch",
+          "path": "cmake_pa-obs.patch"
         }
       ]
     },
