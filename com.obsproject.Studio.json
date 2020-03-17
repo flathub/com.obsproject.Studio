@@ -161,7 +161,7 @@
         "-DDISABLE_ALSA=1",
         "-DDISABLE_JACK=1",
         "-DENABLE_PULSEAUDIO=ON",
-        "-DOBS_VERSION_OVERRIDE=24.0.6"
+        "-DOBS_VERSION_OVERRIDE=25.0.0"
       ],
       "post-install": [
         "install -d /app/lib/blackmagic"
@@ -170,8 +170,8 @@
         {
           "type": "git",
           "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "24.0.6",
-          "commit": "6594d0fb15964319ee787ea3a827d004bf9577dd"
+          "tag": "25.0.0",
+          "commit": "327a6f599e7ae1d48a288ec3885ff3cd8b7bf538"
         },
         {
           "type": "shell",
