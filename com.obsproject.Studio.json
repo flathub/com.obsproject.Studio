@@ -148,6 +148,29 @@
         ]
     },
     {
+      "name": "mbedtls",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+        "-DUSE_SHARED_MBEDTLS_LIBRARY=ON",
+        "-DUSE_STATIC_MBEDTLS_LIBRARY=OFF",
+        "-DENABLE_TESTING=OFF",
+        "-DENABLE_PROGRAMS=OFF"
+      ],
+      "cleanup": [
+        "/include",
+        "/lib/cmake"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://tls.mbed.org/download/mbedtls-2.16.5-apache.tgz",
+          "sha256": "65b4c6cec83e048fd1c675e9a29a394ea30ad0371d37b5742453f74084e7b04d"
+        }
+      ]
+    },
+    {
       "name": "obs",
       "buildsystem": "cmake-ninja",
       "cleanup": [
@@ -161,6 +184,7 @@
         "-DDISABLE_ALSA=1",
         "-DDISABLE_JACK=1",
         "-DENABLE_PULSEAUDIO=ON",
+        "-DWITH_RTMPS=ON",
         "-DOBS_VERSION_OVERRIDE=25.0.0"
       ],
       "post-install": [
