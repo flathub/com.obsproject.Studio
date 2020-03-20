@@ -148,6 +148,29 @@
         ]
     },
     {
+      "name": "mbedtls",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+        "-DUSE_SHARED_MBEDTLS_LIBRARY=ON",
+        "-DUSE_STATIC_MBEDTLS_LIBRARY=OFF",
+        "-DENABLE_TESTING=OFF",
+        "-DENABLE_PROGRAMS=OFF"
+      ],
+      "cleanup": [
+        "/include",
+        "/lib/cmake"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://tls.mbed.org/download/mbedtls-2.16.5-apache.tgz",
+          "sha256": "65b4c6cec83e048fd1c675e9a29a394ea30ad0371d37b5742453f74084e7b04d"
+        }
+      ]
+    },
+    {
       "name": "obs",
       "buildsystem": "cmake-ninja",
       "cleanup": [
@@ -159,7 +182,10 @@
         "-DUNIX_STRUCTURE=1",
         "-DUSE_XDG=1",
         "-DDISABLE_ALSA=1",
-        "-DDISABLE_JACK=1"
+        "-DDISABLE_JACK=1",
+        "-DENABLE_PULSEAUDIO=ON",
+        "-DWITH_RTMPS=ON",
+        "-DOBS_VERSION_OVERRIDE=25.0.1"
       ],
       "post-install": [
         "install -d /app/lib/blackmagic"
@@ -168,8 +194,8 @@
         {
           "type": "git",
           "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "24.0.5",
-          "commit": "99638ba69782bdb10531a305093bbd25e5d3baef"
+          "tag": "25.0.1",
+          "commit": "b19ea6fe3516a7a8bdf44f50bb95a36f4681330d"
         },
         {
           "type": "shell",
@@ -178,10 +204,6 @@
         {
           "type": "shell",
           "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.14\"/' libobs/obs-nix.c" ]
-        },
-        {
-          "type": "patch",
-          "path": "cmake_pa-obs.patch"
         }
       ]
     },
