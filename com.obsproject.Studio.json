@@ -29,16 +29,25 @@
       "autodelete": true
     }
   },
+  "cleanup": [
+    "/include",
+    "/lib/cmake",
+    "/lib/pkgconfig",
+    "/share/man",
+    "*.la"
+  ],
   "modules": [
     {
       "name": "x264",
-      "cleanup": ["/bin", "/include", "/lib/pkgconfig", "/lib/*.la"],
-      "config-opts": ["--enable-shared", "--enable-pic", "--disable-lavf"],
+      "config-opts": [
+        "--disable-cli",
+        "--enable-shared"
+      ],
       "sources": [
         {
-          "type": "git",
-          "url": "https://code.videolan.org/videolan/x264.git",
-          "commit": "1771b556ee45207f8711744ccbd5d42a3949b14c"
+          "type": "archive",
+          "url": "https://code.videolan.org/videolan/x264/-/archive/1771b556ee45207f8711744ccbd5d42a3949b14c/x264-1771b556ee45207f8711744ccbd5d42a3949b14c.tar.bz2",
+          "sha256": "b31c5db5337873b9ee42b8cbc60b56d60ce368fa7e4c4eff90a729b36eeb8326"
         }
       ]
     },
@@ -52,37 +61,34 @@
         "--disable-qv4l2",
         "--with-udevdir=/app/lib/udev/"
       ],
-      "cleanup": [
-        "/include",
-        "/lib/pkgconfig",
-        "/share/man",
-        "*.la"
-      ],
       "sources": [
         {
           "type": "archive",
-          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.16.8.tar.bz2",
-          "sha256": "84346bf200bd30efb8a80a65ded1b81d39ae7e0ff2272e98f478b4eee8f40d13"
+          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.18.0.tar.bz2",
+          "sha256": "6cb60d822eeed20486a03cc23e0fc65956fbc1e85e0c1a7477f68bbd9802880d"
         }
       ]
     },
     {
       "name": "nv-codec-headers",
-      "cleanup": ["*"],
       "no-autogen": true,
-      "make-install-args": ["PREFIX=/app"],
+      "make-install-args": [
+        "PREFIX=/app"
+      ],
+      "cleanup": [
+        "*"
+      ],
       "sources": [
         {
           "type": "git",
           "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
-          "commit": "aaac5dfd2f6beac704e3ff944abd3ef60a322e3b",
-          "tag": "n9.0.18.3"
+          "commit": "4a0bbfd58724d6d19851cd8a6f7a9098dde9ab77",
+          "tag": "n9.1.23.1"
         }
       ]
     },
     {
       "name": "ffmpeg",
-      "cleanup": [ "/include", "/lib/pkgconfig", "/share/ffmpeg" ],
       "config-opts": [
         "--enable-gpl",
         "--enable-shared",
@@ -96,6 +102,9 @@
         "--enable-libvorbis",
         "--enable-nvenc"
       ],
+      "cleanup": [
+        "/share/ffmpeg"
+      ],
       "sources": [
         {
           "type": "archive",
@@ -108,9 +117,7 @@
       "name": "luajit",
       "no-autogen": true,
       "cleanup": [
-        "/bin", "/lib/*.a",
-        "/include", "/lib/pkgconfig",
-        "/share/man"
+        "/bin"
       ],
       "sources": [
         {
@@ -120,7 +127,9 @@
         },
         {
           "type": "shell",
-          "commands": [ "sed -i 's|/usr/local|/app|' ./Makefile" ]
+          "commands": [
+            "sed -i 's|/usr/local|/app|' ./Makefile"
+          ]
         }
       ]
     },
@@ -136,8 +145,7 @@
           "--with-python3"
         ],
         "cleanup": [
-          "/bin",
-          "/share/swig"
+          "*"
         ],
         "sources": [
             {
@@ -150,6 +158,7 @@
     {
       "name": "mbedtls",
       "buildsystem": "cmake-ninja",
+      "builddir": true,
       "config-opts": [
         "-DCMAKE_BUILD_TYPE=Release",
         "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
@@ -157,10 +166,6 @@
         "-DUSE_STATIC_MBEDTLS_LIBRARY=OFF",
         "-DENABLE_TESTING=OFF",
         "-DENABLE_PROGRAMS=OFF"
-      ],
-      "cleanup": [
-        "/include",
-        "/lib/cmake"
       ],
       "sources": [
         {
@@ -173,19 +178,16 @@
     {
       "name": "obs",
       "buildsystem": "cmake-ninja",
-      "cleanup": [
-        "/include",
-        "/lib/cmake"
-      ],
+      "builddir": true,
       "config-opts": [
         "-DCMAKE_BUILD_TYPE=Release",
-        "-DUNIX_STRUCTURE=1",
-        "-DUSE_XDG=1",
-        "-DDISABLE_ALSA=1",
-        "-DDISABLE_JACK=1",
+        "-DUNIX_STRUCTURE=ON",
+        "-DUSE_XDG=ON",
+        "-DDISABLE_ALSA=ON",
+        "-DDISABLE_JACK=ON",
         "-DENABLE_PULSEAUDIO=ON",
         "-DWITH_RTMPS=ON",
-        "-DOBS_VERSION_OVERRIDE=25.0.1"
+        "-DOBS_VERSION_OVERRIDE=25.0.3"
       ],
       "post-install": [
         "install -d /app/lib/blackmagic"
@@ -194,16 +196,8 @@
         {
           "type": "git",
           "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "25.0.1",
-          "commit": "b19ea6fe3516a7a8bdf44f50bb95a36f4681330d"
-        },
-        {
-          "type": "shell",
-          "commands": [ "sed -i s/luajit-2.0/luajit-2.1/g cmake/Modules/FindLuajit.cmake" ]
-        },
-        {
-          "type": "shell",
-          "commands": [ "sed -i 's/distro.array, version.array/\"Flatpak KDE Runtime\", \"5.14\"/' libobs/obs-nix.c" ]
+          "tag": "25.0.3",
+          "commit": "3c78a8aa8d5f5c3fd0242697c06582dc96daa012"
         }
       ]
     },
