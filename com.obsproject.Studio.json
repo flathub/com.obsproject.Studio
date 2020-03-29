@@ -27,11 +27,15 @@
       "add-ld-path": ".",
       "no-autodownload": true,
       "autodelete": true
+    },
+    "com.obsproject.Studio.NDI": {
+      "directory": "lib/ndi",
+      "add-ld-path": ".",
+      "no-autodownload": true,
+      "autodelete": true
     }
   },
   "cleanup": [
-    "/include",
-    "/lib/cmake",
     "/lib/pkgconfig",
     "/share/man",
     "*.la"
@@ -42,6 +46,9 @@
       "config-opts": [
         "--disable-cli",
         "--enable-shared"
+      ],
+      "cleanup": [
+        "/include"
       ],
       "sources": [
         {
@@ -60,6 +67,9 @@
         "--disable-v4l-utils",
         "--disable-qv4l2",
         "--with-udevdir=/app/lib/udev/"
+      ],
+      "cleanup": [
+        "/include"
       ],
       "sources": [
         {
@@ -104,7 +114,8 @@
         "--enable-nvenc"
       ],
       "cleanup": [
-        "/share/ffmpeg"
+        "/share/ffmpeg",
+        "/include"
       ],
       "sources": [
         {
@@ -118,7 +129,8 @@
       "name": "luajit",
       "no-autogen": true,
       "cleanup": [
-        "/bin"
+        "/bin",
+        "/include"
       ],
       "sources": [
         {
@@ -168,6 +180,9 @@
         "-DENABLE_TESTING=OFF",
         "-DENABLE_PROGRAMS=OFF"
       ],
+      "cleanup": [
+        "/include"
+      ],
       "sources": [
         {
           "type": "archive",
@@ -191,7 +206,8 @@
         "-DOBS_VERSION_OVERRIDE=25.0.3"
       ],
       "post-install": [
-        "install -d /app/lib/blackmagic"
+        "install -d /app/lib/blackmagic /app/lib/ndi",
+        "ln -s /app/lib/ndi/obs-ndi.so /app/lib/obs-plugins/obs-ndi.so"
       ],
       "sources": [
         {

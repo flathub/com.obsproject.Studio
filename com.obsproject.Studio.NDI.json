@@ -1,0 +1,95 @@
+{
+  "id": "com.obsproject.Studio.NDI",
+  "branch": "stable",
+  "runtime": "com.obsproject.Studio",
+  "runtime-version": "stable",
+  "sdk": "org.kde.Sdk//5.14",
+  "build-extension": true,
+  "separate-locales": false,
+  "appstream-compose": false,
+  "modules": [
+    {
+      "name": "avahi",
+      "no-make-install": true,
+      "config-opts": [
+        "--with-distro=none",
+        "--disable-qt3",
+        "--disable-qt4",
+        "--disable-qt5",
+        "--disable-gtk",
+        "--disable-gtk3",
+        "--disable-glib",
+        "--disable-gobject",
+        "--disable-python",
+        "--disable-mono",
+        "--disable-monodoc",
+        "--disable-libevent",
+        "--disable-libdaemon",
+        "--disable-dbm",
+        "--disable-gdbm",
+        "--disable-manpages",
+        "--libdir=/app/lib/ndi",
+        "--includedir=/app/lib/ndi/include"
+      ],
+      "post-install": [
+        "make -C avahi-common install",
+        "make -C avahi-client install",
+        "rm -r /app/lib/ndi/include /app/lib/ndi/*.{a,la}"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/lathiat/avahi/releases/download/v0.8/avahi-0.8.tar.gz",
+          "sha256": "060309d7a333d38d951bc27598c677af1796934dbd98e1024e7ad8de798fedda"
+        }
+      ]
+    },
+    {
+      "name": "obs-ndi",
+      "buildsystem": "cmake-ninja",
+      "no-make-install": true,
+      "config-opts": [
+        "-DLIBOBS_INCLUDE_DIR=./obs-source/libobs"
+      ],
+      "post-install": [
+        "install -Dm644 obs-ndi.so /app/lib/ndi/obs-ndi.so"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://github.com/Palakis/obs-ndi/archive/4.7.1.tar.gz",
+          "sha256": "da43fb827656ca4f6dc35f2c1f792bd39805cbd4ef6eedd47045637c9383214c"
+        },
+        {
+          "type": "archive",
+          "//": "It needs a copy of the source for some cmake files, its easier to just download again",
+          "url": "https://github.com/obsproject/obs-studio/archive/25.0.1.tar.gz",
+          "sha256": "2f95648424c0b4ebec585db9da4b4f8dd7af6f7d2d41b2e7593e2efeb5f360ca",
+          "dest": "obs-source"
+        },
+        {
+          "type": "shell",
+          "commands": [
+            "# The NDILIB_REDIST_FOLDER env var doesn't work?",
+            "sed -i 's|/usr/lib|/app/lib/ndi|' src/obs-ndi.cpp"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ndi-sdk",
+      "buildsystem": "simple",
+      "build-commands": [
+        "tar -xf InstallNDISDK_v4_Linux.tar.gz",
+        "yes | env PAGER=/dev/null ./InstallNDISDK_v4_Linux.sh",
+        "install --target-directory=/app/lib/ndi -Dm644 NDI\\ SDK\\ for\\ Linux/lib/x86_64-linux-gnu/*"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "path": "InstallNDISDK_v4_Linux.tar.gz"
+        }
+      ]
+    }
+  ]
+}
