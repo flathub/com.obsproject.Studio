@@ -203,7 +203,7 @@
         "-DDISABLE_JACK=ON",
         "-DENABLE_PULSEAUDIO=ON",
         "-DWITH_RTMPS=ON",
-        "-DOBS_VERSION_OVERRIDE=25.0.3"
+        "-DOBS_VERSION_OVERRIDE=25.0.4"
       ],
       "post-install": [
         "install -d /app/lib/blackmagic /app/lib/ndi",
@@ -213,8 +213,8 @@
         {
           "type": "git",
           "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "25.0.3",
-          "commit": "3c78a8aa8d5f5c3fd0242697c06582dc96daa012"
+          "tag": "25.0.4",
+          "commit": "47058d9b6999f14bb5e2c76f7ae449efa2ca1c13"
         }
       ]
     },
