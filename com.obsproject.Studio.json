@@ -19,7 +19,10 @@
     "--talk-name=org.freedesktop.Notifications",
     "--talk-name=org.mate.SessionManager",
     "--talk-name=org.gnome.SessionManager",
-    "--own-name=org.kde.StatusNotifierItem-2-2"
+    "--own-name=org.kde.StatusNotifierItem-2-2",
+    "--system-talk-name=org.freedesktop.Avahi"
+   ],
+
   ],
   "add-extensions": {
     "com.obsproject.Studio.BlackMagicLibs": {
