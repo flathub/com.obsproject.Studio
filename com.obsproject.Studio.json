@@ -208,7 +208,9 @@
       ],
       "post-install": [
         "install -d /app/lib/blackmagic /app/lib/ndi",
-        "ln -s /app/lib/ndi/obs-ndi.so /app/lib/obs-plugins/obs-ndi.so"
+        "ln -s /app/lib/ndi/obs-ndi.so /app/lib/obs-plugins/obs-ndi.so",
+        "mkdir -p /app/share/obs/obs-plugins/obs-ndi",
+        "ln -s /app/lib/ndi/locale /app/share/obs/obs-plugins/obs-ndi/locale"
       ],
       "sources": [
         {

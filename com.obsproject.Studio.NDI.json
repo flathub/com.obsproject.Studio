@@ -52,7 +52,8 @@
         "-DLIBOBS_INCLUDE_DIR=./obs-source/libobs"
       ],
       "post-install": [
-        "install -Dm644 obs-ndi.so /app/lib/ndi/obs-ndi.so"
+        "install -Dm644 obs-ndi.so /app/lib/ndi/obs-ndi.so",
+        "cp -r data/locale /app/lib/ndi/locale"
       ],
       "sources": [
         {
