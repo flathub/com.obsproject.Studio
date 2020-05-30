@@ -34,6 +34,12 @@
       "add-ld-path": ".",
       "no-autodownload": true,
       "autodelete": true
+    },
+    "com.obsproject.Studio.V4L2Sink": {
+      "directory": "lib/v4l2sink",
+      "add-ld-path": ".",
+      "no-autodownload": true,
+      "autodelete": true
     }
   },
   "cleanup": [
@@ -207,10 +213,11 @@
         "-DOBS_VERSION_OVERRIDE=25.0.8"
       ],
       "post-install": [
-        "install -d /app/lib/blackmagic /app/lib/ndi",
+        "install -d /app/lib/blackmagic /app/lib/ndi /app/lib/v4l2sink",
         "ln -s /app/lib/ndi/obs-ndi.so /app/lib/obs-plugins/obs-ndi.so",
         "mkdir -p /app/share/obs/obs-plugins/obs-ndi",
-        "ln -s /app/lib/ndi/locale /app/share/obs/obs-plugins/obs-ndi/locale"
+        "ln -s /app/lib/ndi/locale /app/share/obs/obs-plugins/obs-ndi/locale",
+        "ln -s /app/lib/v4l2sink/v4l2sink.so /app/lib/obs-plugins/obs-v4l2sink.so"
       ],
       "sources": [
         {
