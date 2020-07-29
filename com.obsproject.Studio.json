@@ -246,7 +246,6 @@
         "-DUNIX_STRUCTURE=ON",
         "-DUSE_XDG=ON",
         "-DDISABLE_ALSA=ON",
-        "-DDISABLE_JACK=ON",
         "-DENABLE_PULSEAUDIO=ON",
         "-DWITH_RTMPS=ON",
         "-DOBS_VERSION_OVERRIDE=25.0.8"
