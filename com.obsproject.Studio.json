@@ -224,6 +224,7 @@
       "name": "pipewire",
       "buildsystem": "meson",
       "config-opts": [
+        "-Dalsa=false",
         "-Dbluez5=false",
         "-Dexamples=false",
         "-Dman=false",
