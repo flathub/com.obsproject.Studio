@@ -6,7 +6,7 @@
   "sdk": "org.kde.Sdk",
   "command": "obs",
   "finish-args": [
-    "--socket=x11",
+    "--socket=fallback-x11",
     "--socket=pulseaudio",
     "--device=all",
     "--share=network",
@@ -248,6 +248,7 @@
         "-DDISABLE_ALSA=ON",
         "-DENABLE_PULSEAUDIO=ON",
         "-DWITH_RTMPS=ON",
+        "-DENABLE_WAYLAND=ON",
         "-DOBS_VERSION_OVERRIDE=25.0.8"
       ],
       "post-install": [
@@ -260,9 +261,8 @@
       "sources": [
         {
           "type": "git",
-          "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "25.0.8",
-          "commit": "4c0d4a1d8e1433897dcbbff6084b0f38a421f231"
+          "url": "https://github.com/GeorgesStavracas/obs-studio.git",
+          "tag": "25.0.8-dmabuf"
         }
       ]
     },
@@ -272,9 +272,9 @@
       "config-opts": ["--buildtype=release"],
       "sources": [
         {
-          "type": "archive",
-          "url": "https://gitlab.gnome.org/feaneron/obs-xdg-portal/-/archive/0.1.2/obs-xdg-portal-0.1.2.tar.gz",
-          "sha256": "ef0c72680a58e8bf30c6bbc6c3daf163031c6dfc2b0c01a3b2b26fc995db145e"
+          "type": "git",
+          "url": "https://gitlab.gnome.org/feaneron/obs-xdg-portal.git",
+          "branch": "gbsneto/pipewire"
         }
       ]
     }
