@@ -13,6 +13,7 @@
     "--share=network",
     "--share=ipc",
     "--filesystem=xdg-run/obs-xdg-portal:create",
+    "--filesystem=xdg-run/pipewire-0",
     "--filesystem=host",
     "--talk-name=org.kde.StatusNotifierWatcher",
     "--talk-name=org.freedesktop.ScreenSaver",
