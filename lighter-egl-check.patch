@@ -1,0 +1,35 @@
+From 9e367fa7d27afd4bd6b650edac6641d7433e1664 Mon Sep 17 00:00:00 2001
+From: Georges Basile Stavracas Neto <georges.stavracas@gmail.com>
+Date: Mon, 31 Aug 2020 23:03:43 -0300
+Subject: [PATCH] Try and fix EGL on Wayland for some i915 metals
+
+---
+ libobs-opengl/gl-wayland-egl.c | 11 +++--------
+ 1 file changed, 3 insertions(+), 8 deletions(-)
+
+diff --git a/libobs-opengl/gl-wayland-egl.c b/libobs-opengl/gl-wayland-egl.c
+index 33352dfb..e6fe02e5 100644
+--- a/libobs-opengl/gl-wayland-egl.c
++++ b/libobs-opengl/gl-wayland-egl.c
+@@ -187,15 +187,10 @@ static struct gl_platform *gl_wayland_egl_platform_create(gs_device_t *device,
+ 	blog(LOG_DEBUG, "Supported EGL Extensions: %s", extensions);
+ 
+ 	const EGLint *attribs = ctx_attribs;
+-	if (major == 1 && minor == 4) {
+-		if (extension_supported(extensions, "EGL_KHR_create_context")) {
++	if (major > 1 || (major == 1 && minor >= 4)) {
++		if (extension_supported(extensions, "EGL_KHR_create_context"))
+ 			attribs = khr_ctx_attribs;
+-		} else {
+-			blog(LOG_ERROR,
+-			     "EGL_KHR_create_context extension is required to use EGL 1.4.");
+-			goto fail_context_create;
+-		}
+-	} else if (major < 1 || (major == 1 && minor < 4)) {
++	} else {
+ 		blog(LOG_ERROR, "EGL 1.4 or higher is required.");
+ 		goto fail_context_create;
+ 	}
+-- 
+2.28.0
+
