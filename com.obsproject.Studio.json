@@ -204,15 +204,12 @@
       "name": "jack2",
       "buildsystem": "simple",
       "build-commands": [
-        "./waf configure --prefix=/app --htmldir=/app/share/doc/jack/ --classic",
+        "./waf configure --prefix=$FLATPAK_DEST",
         "./waf build -j $FLATPAK_BUILDER_N_JOBS",
         "./waf install"
       ],
       "cleanup": [
-        "/bin",
-        "/share",
-        "/lib/jack",
-        "/lib/libjackserver.so*"
+        "*"
       ],
       "sources": [
         {
