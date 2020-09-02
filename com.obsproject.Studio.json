@@ -220,23 +220,6 @@
       ]
     },
     {
-      "name": "pipewire",
-      "buildsystem": "meson",
-      "config-opts": [
-        "-Dalsa=false",
-        "-Dbluez5=false",
-        "-Dexamples=false",
-        "-Dman=false",
-        "-Dtests=false"
-      ],
-      "sources": [
-        {
-          "type": "git",
-          "url": "https://gitlab.freedesktop.org/pipewire/pipewire.git"
-        }
-      ]
-    },
-    {
       "name": "obs",
       "buildsystem": "cmake-ninja",
       "builddir": true,
