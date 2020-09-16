@@ -105,6 +105,27 @@
       ]
     },
     {
+    "name": "srt",
+    "buildsystem": "cmake-ninja",
+    "config-opts": [
+      "-DENABLE_STATIC=OFF",
+      "-DENABLE_APPS=OFF",
+      "-DENABLE_LOGGING=OFF"
+    ],
+    "cleanup": [
+      "/include",
+      "/bin"
+    ],
+    "sources": [
+      {
+        "type": "git",
+        "url": "https://github.com/Haivision/srt.git",
+        "tag": "v1.4.1",
+        "commit": "9e52606fae3b32818b5b734d45d3358f4a95cf3f"
+      }
+    ]
+  },
+    {
       "name": "ffmpeg",
       "config-opts": [
         "--enable-gpl",
@@ -118,7 +139,8 @@
         "--enable-libvpx",
         "--enable-libvorbis",
         "--enable-libx264",
-        "--enable-nvenc"
+        "--enable-nvenc",
+        "--enable-libsrt"
       ],
       "cleanup": [
         "/share/ffmpeg",
@@ -127,8 +149,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://www.ffmpeg.org/releases/ffmpeg-4.2.2.tar.xz",
-          "sha256": "cb754255ab0ee2ea5f66f8850e1bd6ad5cac1cd855d0a2f4990fb8c668b0d29c"
+          "url": "https://www.ffmpeg.org/releases/ffmpeg-4.3.1.tar.xz",
+          "sha256": "ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb"
         }
       ]
     },
