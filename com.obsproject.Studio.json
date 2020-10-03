@@ -99,8 +99,8 @@
         {
           "type": "git",
           "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
-          "commit": "4a0bbfd58724d6d19851cd8a6f7a9098dde9ab77",
-          "tag": "n9.1.23.1"
+          "commit": "5ee2ae591f74f53bd6028344f8690f1558a1f17a",
+          "tag": "n10.0.26.0"
         }
       ]
     },
