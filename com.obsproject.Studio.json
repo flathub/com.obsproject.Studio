@@ -151,6 +151,10 @@
           "type": "archive",
           "url": "https://www.ffmpeg.org/releases/ffmpeg-4.3.1.tar.xz",
           "sha256": "ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb"
+        },
+        {
+          "type": "patch",
+          "path": "ffmpeg-libsrt.patch"
         }
       ]
     },
