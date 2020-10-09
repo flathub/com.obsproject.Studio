@@ -2,7 +2,7 @@
   "app-id": "com.obsproject.Studio",
   "default-branch": "stable",
   "runtime": "org.kde.Platform",
-  "runtime-version": "5.14",
+  "runtime-version": "5.15",
   "sdk": "org.kde.Sdk",
   "command": "obs",
   "finish-args": [
@@ -59,9 +59,9 @@
       ],
       "sources": [
         {
-          "type": "archive",
-          "url": "https://code.videolan.org/videolan/x264/-/archive/1771b556ee45207f8711744ccbd5d42a3949b14c/x264-1771b556ee45207f8711744ccbd5d42a3949b14c.tar.bz2",
-          "sha256": "b31c5db5337873b9ee42b8cbc60b56d60ce368fa7e4c4eff90a729b36eeb8326"
+          "type": "git",
+          "url": "https://code.videolan.org/videolan/x264.git",
+          "commit": "cde9a93319bea766a92e306d69059c76de970190"
         }
       ]
     },
@@ -81,8 +81,8 @@
       "sources": [
         {
           "type": "archive",
-          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.18.0.tar.bz2",
-          "sha256": "6cb60d822eeed20486a03cc23e0fc65956fbc1e85e0c1a7477f68bbd9802880d"
+          "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.20.0.tar.bz2",
+          "sha256": "956118713f7ccb405c55c7088a6a2490c32d54300dd9a30d8d5008c28d3726f7"
         }
       ]
     },
@@ -99,8 +99,8 @@
         {
           "type": "git",
           "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
-          "commit": "5ee2ae591f74f53bd6028344f8690f1558a1f17a",
-          "tag": "n10.0.26.0"
+          "commit": "a99740a84b49fd609e04b03279e66c5a8b767440",
+          "tag": "n10.0.26.1"
         }
       ]
     },
@@ -120,8 +120,8 @@
       {
         "type": "git",
         "url": "https://github.com/Haivision/srt.git",
-        "tag": "v1.4.1",
-        "commit": "9e52606fae3b32818b5b734d45d3358f4a95cf3f"
+        "tag": "v1.4.2",
+        "commit": "50b7af06f3a0a456c172b4cb3aceafa8a5cc0036"
       }
     ]
   },
@@ -192,8 +192,8 @@
         "sources": [
             {
                 "type": "archive",
-                "url": "https://prdownloads.sourceforge.net/swig/swig-4.0.1.tar.gz",
-                "sha256": "7a00b4d0d53ad97a14316135e2d702091cd5f193bb58bcfcd8bc59d41e7887a9"
+                "url": "https://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz",
+                "sha256": "d53be9730d8d58a16bf0cbd1f8ac0c0c3e1090573168bfa151b01eb47fa906fc"
             }
         ]
     },
@@ -214,9 +214,10 @@
       ],
       "sources": [
         {
-          "type": "archive",
-          "url": "https://tls.mbed.org/download/mbedtls-2.16.5-apache.tgz",
-          "sha256": "65b4c6cec83e048fd1c675e9a29a394ea30ad0371d37b5742453f74084e7b04d"
+          "type": "git",
+          "url": "https://github.com/ARMmbed/mbedtls.git",
+          "commit": "848a4e06b375e067552f1a21d4bc69322c673217",
+          "tag": "mbedtls-2.16.8"
         }
       ]
     },
