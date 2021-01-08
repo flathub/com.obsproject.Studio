@@ -237,7 +237,7 @@
         "-DDISABLE_JACK=ON",
         "-DENABLE_PULSEAUDIO=ON",
         "-DWITH_RTMPS=ON",
-        "-DOBS_VERSION_OVERRIDE=26.1.0"
+        "-DOBS_VERSION_OVERRIDE=26.1.1"
       ],
       "post-install": [
         "install -d /app/lib/blackmagic /app/lib/ndi /app/lib/v4l2sink",
@@ -250,8 +250,8 @@
         {
           "type": "git",
           "url": "https://github.com/obsproject/obs-studio.git",
-          "tag": "26.1.0",
-          "commit": "38ad3ba18fc27846e122bd56f589ccb34c4578e2"
+          "tag": "26.1.1",
+          "commit": "dffa8221124106bc2a4c92e5f5d0fa21128a61f6"
         }
       ]
     },
