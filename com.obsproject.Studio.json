@@ -23,6 +23,13 @@
     "--system-talk-name=org.freedesktop.Avahi"
   ],
   "add-extensions": {
+    "com.obsproject.Studio.Plugin": {
+      "directory": "plugins",
+      "subdirectories": true,
+      "merge-dirs": "lib;share",
+      "no-autodownload": true,
+      "autodelete": true
+    },
     "com.obsproject.Studio.BlackMagicLibs": {
       "directory": "lib/blackmagic",
       "add-ld-path": ".",
@@ -240,6 +247,9 @@
         "-DOBS_VERSION_OVERRIDE=26.1.1"
       ],
       "post-install": [
+        /* Generic extension point */
+        "install -d /app/plugins",
+        /* Non-generic extension links */
         "install -d /app/lib/blackmagic /app/lib/ndi /app/lib/v4l2sink",
         "ln -s /app/lib/ndi/obs-ndi.so /app/lib/obs-plugins/obs-ndi.so",
         "mkdir -p /app/share/obs/obs-plugins/obs-ndi",
@@ -252,6 +262,10 @@
           "url": "https://github.com/obsproject/obs-studio.git",
           "tag": "26.1.1",
           "commit": "dffa8221124106bc2a4c92e5f5d0fa21128a61f6"
+        },
+        {
+          "type": "patch",
+          "path": "obs-plugins-dir.patch"
         }
       ]
     },
