@@ -26,7 +26,8 @@
     "com.obsproject.Studio.Plugin": {
       "directory": "plugins",
       "subdirectories": true,
-      "merge-dirs": "lib;share",
+      "add-ld-path": "lib",
+      "merge-dirs": "lib/obs-plugins;share/obs/obs-plugins",
       "no-autodownload": true,
       "autodelete": true
     },
