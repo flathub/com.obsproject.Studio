@@ -42,12 +42,6 @@
       "add-ld-path": ".",
       "no-autodownload": true,
       "autodelete": true
-    },
-    "com.obsproject.Studio.V4L2Sink": {
-      "directory": "lib/v4l2sink",
-      "add-ld-path": ".",
-      "no-autodownload": true,
-      "autodelete": true
     }
   },
   "cleanup": [
@@ -254,8 +248,7 @@
         "install -d /app/lib/blackmagic /app/lib/ndi /app/lib/v4l2sink",
         "ln -s /app/lib/ndi/obs-ndi.so /app/lib/obs-plugins/obs-ndi.so",
         "mkdir -p /app/share/obs/obs-plugins/obs-ndi",
-        "ln -s /app/lib/ndi/locale /app/share/obs/obs-plugins/obs-ndi/locale",
-        "ln -s /app/lib/v4l2sink/v4l2sink.so /app/lib/obs-plugins/obs-v4l2sink.so"
+        "ln -s /app/lib/ndi/locale /app/share/obs/obs-plugins/obs-ndi/locale"
       ],
       "sources": [
         {
@@ -279,6 +272,19 @@
           "type": "archive",
           "url": "https://gitlab.gnome.org/feaneron/obs-xdg-portal/-/archive/0.1.2/obs-xdg-portal-0.1.2.tar.gz",
           "sha256": "ef0c72680a58e8bf30c6bbc6c3daf163031c6dfc2b0c01a3b2b26fc995db145e"
+        }
+      ]
+    },
+    {
+      "name": "fake-modinfo",
+      "buildsystem": "simple",
+      "build-commands": [
+        "install -Dm0755 modinfo.sh /app/bin/modinfo"
+      ],
+      "sources": [
+        {
+          "type": "file",
+          "path": "modinfo.sh"
         }
       ]
     }
