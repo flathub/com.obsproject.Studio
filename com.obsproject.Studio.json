@@ -69,6 +69,7 @@
         {
           "type": "git",
           "url": "https://code.videolan.org/videolan/x264.git",
+          "branch": "master",
           "commit": "cde9a93319bea766a92e306d69059c76de970190"
         }
       ]
@@ -90,7 +91,12 @@
         {
           "type": "archive",
           "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.20.0.tar.bz2",
-          "sha256": "956118713f7ccb405c55c7088a6a2490c32d54300dd9a30d8d5008c28d3726f7"
+          "sha256": "956118713f7ccb405c55c7088a6a2490c32d54300dd9a30d8d5008c28d3726f7",
+          "x-checker-data": {
+            "type": "anitya",
+            "project-id": 9998,
+            "url-template": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-$version.tar.bz2"
+          }
         }
       ]
     },
@@ -108,7 +114,11 @@
           "type": "git",
           "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
           "commit": "a99740a84b49fd609e04b03279e66c5a8b767440",
-          "tag": "n10.0.26.1"
+          "tag": "n10.0.26.1",
+          "x-checker-data": {
+            "type": "git",
+            "tag-pattern": "^n([\\d.]+)$"
+          }
         }
       ]
     },
@@ -129,7 +139,11 @@
         "type": "git",
         "url": "https://github.com/Haivision/srt.git",
         "tag": "v1.4.2",
-        "commit": "50b7af06f3a0a456c172b4cb3aceafa8a5cc0036"
+        "commit": "50b7af06f3a0a456c172b4cb3aceafa8a5cc0036",
+        "x-checker-data": {
+          "type": "git",
+          "tag-pattern": "^v([\\d.]+)$"
+        }
       }
     ]
   },
@@ -158,7 +172,12 @@
         {
           "type": "archive",
           "url": "https://www.ffmpeg.org/releases/ffmpeg-4.3.1.tar.xz",
-          "sha256": "ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb"
+          "sha256": "ad009240d46e307b4e03a213a0f49c11b650e445b1f8be0dda2a9212b34d2ffb",
+          "x-checker-data": {
+            "type": "anitya",
+            "project-id": 5405,
+            "url-template": "https://www.ffmpeg.org/releases/ffmpeg-$version.tar.xz"
+            }
         },
         {
           "type": "patch",
@@ -205,7 +224,12 @@
             {
                 "type": "archive",
                 "url": "https://prdownloads.sourceforge.net/swig/swig-4.0.2.tar.gz",
-                "sha256": "d53be9730d8d58a16bf0cbd1f8ac0c0c3e1090573168bfa151b01eb47fa906fc"
+                "sha256": "d53be9730d8d58a16bf0cbd1f8ac0c0c3e1090573168bfa151b01eb47fa906fc",
+                "x-checker-data": {
+                  "type": "anitya",
+                  "project-id": 4919,
+                  "url-template": "https://prdownloads.sourceforge.net/swig/swig-$version.tar.gz"
+                  }
             }
         ]
     },
@@ -229,7 +253,12 @@
           "type": "git",
           "url": "https://github.com/ARMmbed/mbedtls.git",
           "commit": "848a4e06b375e067552f1a21d4bc69322c673217",
-          "tag": "mbedtls-2.16.8"
+          "tag": "mbedtls-2.16.8",
+          "x-checker-data": {
+            "type": "json",
+            "url": "https://api.github.com/repos/ARMmbed/mbedtls/releases/latest",
+            "tag-query": ".tag_name"
+          }
         }
       ]
     },
