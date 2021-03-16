@@ -287,8 +287,7 @@
                 "-DUSE_XDG=ON",
                 "-DDISABLE_ALSA=ON",
                 "-DENABLE_PULSEAUDIO=ON",
-                "-DWITH_RTMPS=ON",
-                "-DOBS_VERSION_OVERRIDE=26.1.1"
+                "-DWITH_RTMPS=ON"
             ],
             "post-install": [
                 "install -d /app/plugins",
