@@ -250,12 +250,7 @@
                     "type": "git",
                     "url": "https://github.com/ARMmbed/mbedtls.git",
                     "commit": "1c54b5410fd48d6bcada97e30cac417c5c7eea67",
-                    "tag": "v2.25.0",
-                    "x-checker-data": {
-                        "type": "json",
-                        "url": "https://api.github.com/repos/ARMmbed/mbedtls/releases/latest",
-                        "tag-query": ".tag_name"
-                    }
+                    "tag": "v2.25.0"
                 }
             ]
         },
