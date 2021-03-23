@@ -1,3 +1,4 @@
 {
-  "only-arches": ["x86_64", "i386"]
+  "only-arches": ["x86_64", "i386"],
+  "automerge-flathubbot-prs": true
 }
