@@ -7,12 +7,13 @@
     "command": "obs",
     "finish-args": [
         "--socket=x11",
+        "--socket=wayland",
         "--socket=pulseaudio",
         "--device=all",
         "--share=network",
         "--share=ipc",
-        "--filesystem=xdg-run/obs-xdg-portal:create",
         "--filesystem=host",
+        "--filesystem=xdg-run/pipewire-0",
         "--talk-name=org.kde.StatusNotifierWatcher",
         "--talk-name=org.freedesktop.ScreenSaver",
         "--talk-name=org.freedesktop.PowerManagement.Inhibit",
@@ -276,12 +277,14 @@
             "builddir": true,
             "config-opts": [
                 "-DCMAKE_BUILD_TYPE=Release",
+                "-DENABLE_WAYLAND=ON",
                 "-DUNIX_STRUCTURE=ON",
                 "-DUSE_XDG=ON",
                 "-DDISABLE_ALSA=ON",
                 "-DENABLE_PULSEAUDIO=ON",
+                "-DENABLE_PIPEWIRE=ON",
                 "-DWITH_RTMPS=ON",
-                "-DOBS_VERSION_OVERRIDE=26.1.1"
+                "-DOBS_VERSION_OVERRIDE=27.0.0-rc1"
             ],
             "post-install": [
                 "install -d /app/plugins",
@@ -295,26 +298,12 @@
                 {
                     "type": "git",
                     "url": "https://github.com/obsproject/obs-studio.git",
-                    "tag": "26.1.1",
-                    "commit": "dffa8221124106bc2a4c92e5f5d0fa21128a61f6"
+                    "tag": "27.0.0-rc1",
+                    "commit": "334146ee36f8751f92b54716c4ea88f4a88f453d"
                 },
                 {
                     "type": "patch",
                     "path": "obs-plugins-dir.patch"
-                }
-            ]
-        },
-        {
-            "name": "obs-xdg-portal",
-            "buildsystem": "meson",
-            "config-opts": [
-                "--buildtype=release"
-            ],
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://gitlab.gnome.org/feaneron/obs-xdg-portal/-/archive/0.1.2/obs-xdg-portal-0.1.2.tar.gz",
-                    "sha256": "ef0c72680a58e8bf30c6bbc6c3daf163031c6dfc2b0c01a3b2b26fc995db145e"
                 }
             ]
         }
