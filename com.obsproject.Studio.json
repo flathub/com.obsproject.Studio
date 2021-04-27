@@ -56,7 +56,7 @@
         "*.la"
     ],
     "modules": [
-	"shared-modules/linux-audio/jack2.json",
+        "shared-modules/linux-audio/jack2.json",
         {
             "name": "x264",
             "config-opts": [
@@ -139,8 +139,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Haivision/srt.git",
-                    "tag": "v1.4.2",
-                    "commit": "50b7af06f3a0a456c172b4cb3aceafa8a5cc0036",
+                    "tag": "v1.4.3",
+                    "commit": "291e010fbf91b13b92e1cde5dcb824a9d7f4e353",
                     "x-checker-data": {
                         "type": "git",
                         "tag-pattern": "^v([\\d.]+)$"
