@@ -82,7 +82,7 @@
                     "type": "git",
                     "url": "https://code.videolan.org/videolan/x264.git",
                     "branch": "master",
-                    "commit": "b684ebe04a6f80f8207a57940a1fa00e25274f81"
+                    "commit": "5db6aa6cab1b146e07b60cc1736a01f21da01154"
                 }
             ]
         },
