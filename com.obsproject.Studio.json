@@ -316,12 +316,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/obsproject/obs-studio.git",
-                    "tag": "27.0.1",
-                    "commit": "cd5873e9bcfaf9cc2614939ddb3264bea919be4a"
-                },
-                {
-                    "type": "patch",
-                    "path": "obs-plugins-dir.patch"
+                    "tag": "27.1.0-rc1",
+                    "commit": "e276b23f948f7e1567aea0241d5ab8d6e229440c"
                 }
             ]
         }
