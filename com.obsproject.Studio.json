@@ -322,6 +322,10 @@
                 {
                     "type": "patch",
                     "path": "obs-plugins-dir.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "linux-capture-Lookup-session-handle-without-typechec.patch"
                 }
             ]
         }
