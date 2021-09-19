@@ -1,0 +1,757 @@
+From a45494f160be9239b828d0f76ac3b7d769693ca9 Mon Sep 17 00:00:00 2001
+From: columbarius <co1umbarius@protonmail.com>
+Date: Thu, 16 Sep 2021 20:12:06 +0200
+Subject: [PATCH 1/5] libobs-opengl: Load EGL via Glad on Wayland platform
+
+We need to have EGL extensions loaded when dealing with DMA-BUFs.
+
+EGL_EXT_image_dma_buf_import: This extension is required to import
+DMA-BUFs with the modifier-less path. It is limited to buffers with 3
+planes. [1]
+
+EGL_EXT_image_dma_buf_import_modifiers: This extension is required to
+import DMA-BUFs with an explicit modifier. It raises the limit of buffer
+planes to 4, which is the maximum planecount for DMA-BUFs. [2]
+
+[1] https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import.txt
+[2] https://www.khronos.org/registry/EGL/extensions/EXT/EGL_EXT_image_dma_buf_import_modifiers.txt
+---
+ libobs-opengl/gl-wayland-egl.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/libobs-opengl/gl-wayland-egl.c b/libobs-opengl/gl-wayland-egl.c
+index 8d4084dd8..724f89be3 100644
+--- a/libobs-opengl/gl-wayland-egl.c
++++ b/libobs-opengl/gl-wayland-egl.c
+@@ -209,8 +209,14 @@ static struct gl_platform *gl_wayland_egl_platform_create(gs_device_t *device,
+ 		goto fail_load_gl;
+ 	}
+ 
++	if (!gladLoadEGL()) {
++		blog(LOG_ERROR, "Unable to load EGL entry functions.");
++		goto fail_load_egl;
++	}
++
+ 	goto success;
+ 
++fail_load_egl:
+ fail_load_gl:
+ 	egl_context_destroy(plat);
+ fail_context_create:
+-- 
+2.33.0
+
+From de46b491c2681c0cf4b2557a149f654a9c72d8a7 Mon Sep 17 00:00:00 2001
+From: columbarius <co1umbarius@protonmail.com>
+Date: Thu, 16 Sep 2021 22:07:55 +0200
+Subject: [PATCH 2/5] linux-capture: Omit implicit modifier token when creating
+ texture
+
+DRM_FORMAT_MOD_INVALID is a token for implicit modifier. When importing
+a DMA-BUF with implicit modifier we should call
+gs_texture_create_from_dmabuf() without modifier.
+---
+ plugins/linux-capture/pipewire.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/plugins/linux-capture/pipewire.c b/plugins/linux-capture/pipewire.c
+index 655e5183d..6ba101078 100644
+--- a/plugins/linux-capture/pipewire.c
++++ b/plugins/linux-capture/pipewire.c
+@@ -30,6 +30,7 @@
+ #include <fcntl.h>
+ #include <glad/glad.h>
+ #include <linux/dma-buf.h>
++#include <libdrm/drm_fourcc.h>
+ #include <spa/param/video/format-utils.h>
+ #include <spa/debug/format.h>
+ #include <spa/debug/types.h>
+@@ -386,6 +387,7 @@ static void on_process_cb(void *user_data)
+ 		uint32_t strides[planes];
+ 		uint64_t modifiers[planes];
+ 		int fds[planes];
++		bool modifierless; // DMA-BUF without explicit modifier
+ 
+ 		blog(LOG_DEBUG,
+ 		     "[pipewire] DMA-BUF info: fd:%ld, stride:%d, offset:%u, size:%dx%d",
+@@ -410,10 +412,14 @@ static void on_process_cb(void *user_data)
+ 		}
+ 
+ 		g_clear_pointer(&obs_pw->texture, gs_texture_destroy);
++
++		modifierless = obs_pw->format.info.raw.modifier ==
++			       DRM_FORMAT_MOD_INVALID;
+ 		obs_pw->texture = gs_texture_create_from_dmabuf(
+ 			obs_pw->format.info.raw.size.width,
+ 			obs_pw->format.info.raw.size.height, drm_format,
+-			GS_BGRX, planes, fds, strides, offsets, modifiers);
++			GS_BGRX, planes, fds, strides, offsets,
++			modifierless ? NULL : modifiers);
+ 	} else {
+ 		blog(LOG_DEBUG, "[pipewire] Buffer has memory texture");
+ 		enum gs_color_format obs_format;
+-- 
+2.33.0
+
+From 385f0d2403ce718633c64d60609f0126fb472a50 Mon Sep 17 00:00:00 2001
+From: columbarius <co1umbarius@protonmail.com>
+Date: Thu, 16 Sep 2021 21:28:46 +0200
+Subject: [PATCH 3/5] libobs-opengl: Implement DMA-BUF modifier querying on EGL
+ renders
+
+Implement gl_egl_query_dmabuf_modifiers to query supported modifiers via
+EGL.
+---
+ libobs-opengl/gl-egl-common.c | 122 ++++++++++++++++++++++++++++++++++
+ libobs-opengl/gl-egl-common.h |   3 +
+ 2 files changed, 125 insertions(+)
+
+diff --git a/libobs-opengl/gl-egl-common.c b/libobs-opengl/gl-egl-common.c
+index 079eae39c..c28c212e6 100644
+--- a/libobs-opengl/gl-egl-common.c
++++ b/libobs-opengl/gl-egl-common.c
+@@ -20,6 +20,8 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
++#include <libdrm/drm_fourcc.h>
++
+ #include <glad/glad_egl.h>
+ 
+ #if defined(__linux__)
+@@ -215,6 +217,126 @@ gl_egl_create_dmabuf_image(EGLDisplay egl_display, unsigned int width,
+ 	return texture;
+ }
+ 
++EGLint query_dmabuf_formats(EGLDisplay egl_display, EGLint **formats)
++{
++	EGLint max_formats = 0;
++	EGLint *format_list = NULL;
++
++	if (!glad_eglQueryDmaBufFormatsEXT) {
++		blog(LOG_ERROR, "Unable to load eglQueryDmaBufFormatsEXT");
++		return 0;
++	}
++
++	if (!glad_eglQueryDmaBufFormatsEXT(egl_display, 0, NULL,
++					   &max_formats)) {
++		blog(LOG_ERROR, "Cannot query the number of formats: %s",
++		     gl_egl_error_to_string(eglGetError()));
++		return 0;
++	}
++
++	format_list = bzalloc(max_formats * sizeof(EGLint));
++	if (!format_list) {
++		blog(LOG_ERROR, "Unable to allocate memory");
++		return 0;
++	}
++
++	if (!glad_eglQueryDmaBufFormatsEXT(egl_display, max_formats,
++					   format_list, &max_formats)) {
++		blog(LOG_ERROR, "Cannot query a list of formats: %s",
++		     gl_egl_error_to_string(eglGetError()));
++		free(format_list);
++		return 0;
++	}
++
++	*formats = format_list;
++	return max_formats;
++}
++
++EGLint query_dmabuf_modifiers(EGLDisplay egl_display, EGLint drm_format,
++			      EGLuint64KHR **modifiers)
++{
++	EGLint max_modifiers = 0;
++	EGLuint64KHR *modifier_list = NULL;
++	EGLBoolean *external_only = NULL;
++
++	if (!glad_eglQueryDmaBufModifiersEXT) {
++		blog(LOG_ERROR, "Unable to load eglQueryDmaBufModifiersEXT");
++		return 0;
++	}
++
++	if (!glad_eglQueryDmaBufModifiersEXT(egl_display, drm_format, 0, NULL,
++					     NULL, &max_modifiers)) {
++		blog(LOG_ERROR, "Cannot query the number of modifiers: %s",
++		     gl_egl_error_to_string(eglGetError()));
++		return 0;
++	}
++
++	modifier_list = bzalloc(max_modifiers * sizeof(EGLuint64KHR));
++	external_only = bzalloc(max_modifiers * sizeof(EGLBoolean));
++	if (!modifier_list || !external_only) {
++		blog(LOG_ERROR, "Unable to allocate memory");
++		bfree(external_only);
++		bfree(modifier_list);
++		return 0;
++	}
++
++	if (!glad_eglQueryDmaBufModifiersEXT(egl_display, drm_format,
++					     max_modifiers, modifier_list,
++					     external_only, &max_modifiers)) {
++		blog(LOG_ERROR, "Cannot query a list of modifiers: %s",
++		     gl_egl_error_to_string(eglGetError()));
++		bfree(external_only);
++		bfree(modifier_list);
++		return 0;
++	}
++
++	bfree(external_only);
++	*modifiers = modifier_list;
++	return max_modifiers;
++}
++
++int gl_egl_query_dmabuf_modifiers(EGLDisplay egl_display, uint32_t drm_format,
++				  uint64_t **modifiers)
++{
++	if (!glad_eglQueryDmaBufFormatsEXT || !glad_eglQueryDmaBufModifiersEXT)
++		return 0;
++
++	EGLint num_formats;
++	EGLint *format_list;
++	bool format_available;
++
++	if (!(num_formats = query_dmabuf_formats(egl_display, &format_list))) {
++		blog(LOG_ERROR, "No formats supported by dmabuf");
++		return 0;
++	}
++
++	for (int i = 0; i < num_formats; i++) {
++		if (drm_format == (uint32_t)format_list[i]) {
++			format_available = true;
++			break;
++		}
++	}
++	bfree(format_list);
++
++	if (!format_available) {
++		blog(LOG_ERROR, "Format %u not supported with modifiers",
++		     drm_format);
++		return 0;
++	}
++
++	EGLint num_modifiers;
++	EGLuint64KHR *modifier_list;
++
++	num_modifiers =
++		query_dmabuf_modifiers(egl_display, drm_format, &modifier_list);
++
++	*modifiers = bzalloc((num_modifiers + 1) * sizeof(uint64_t));
++	memcpy(*modifiers, modifier_list, num_modifiers * sizeof(uint64_t));
++	bfree(modifier_list);
++	*modifiers[num_modifiers] = DRM_FORMAT_MOD_INVALID;
++	return num_modifiers + 1;
++}
++
+ const char *gl_egl_error_to_string(EGLint error_number)
+ {
+ 	switch (error_number) {
+diff --git a/libobs-opengl/gl-egl-common.h b/libobs-opengl/gl-egl-common.h
+index 45f58d5e2..dc0c81c9b 100644
+--- a/libobs-opengl/gl-egl-common.h
++++ b/libobs-opengl/gl-egl-common.h
+@@ -12,3 +12,6 @@ gl_egl_create_dmabuf_image(EGLDisplay egl_display, unsigned int width,
+ 			   enum gs_color_format color_format, uint32_t n_planes,
+ 			   const int *fds, const uint32_t *strides,
+ 			   const uint32_t *offsets, const uint64_t *modifiers);
++
++int gl_egl_query_dmabuf_modifiers(EGLDisplay egl_display, uint32_t drm_format,
++				  uint64_t **modifiers);
+-- 
+2.33.0
+
+From 6881dada9809689279a37789caaa125e655fdd3c Mon Sep 17 00:00:00 2001
+From: columbarius <co1umbarius@protonmail.com>
+Date: Thu, 16 Sep 2021 21:40:57 +0200
+Subject: [PATCH 4/5] libobs/graphics: Add Linux-only
+ gs_query_dmabuf_modifiers()
+
+When sharing DMA-BUFs it is required the announce the underlying
+hardware capabilities via supported modifiers.
+
+Add new device_query_dmabuf_modifiers vfunc to gs_exports and connect it
+to the egl implementation in the supported render platforms. Add a new
+public method gs_query_dmabuf_modifiers() that calls the vfunc above.
+---
+ .../reference-libobs-graphics-graphics.rst    | 25 +++++++++++++++++++
+ libobs-opengl/gl-nix.c                        |  8 ++++++
+ libobs-opengl/gl-nix.h                        |  4 +++
+ libobs-opengl/gl-wayland-egl.c                | 12 +++++++++
+ libobs-opengl/gl-x11-egl.c                    | 12 +++++++++
+ libobs-opengl/gl-x11-glx.c                    | 13 ++++++++++
+ libobs/graphics/device-exports.h              |  4 +++
+ libobs/graphics/graphics-imports.c            |  1 +
+ libobs/graphics/graphics-internal.h           |  3 +++
+ libobs/graphics/graphics.c                    |  8 ++++++
+ libobs/graphics/graphics.h                    |  2 ++
+ 11 files changed, 92 insertions(+)
+
+diff --git a/docs/sphinx/reference-libobs-graphics-graphics.rst b/docs/sphinx/reference-libobs-graphics-graphics.rst
+index 6a99101b7..976829a7d 100644
+--- a/docs/sphinx/reference-libobs-graphics-graphics.rst
++++ b/docs/sphinx/reference-libobs-graphics-graphics.rst
+@@ -997,6 +997,31 @@ Texture Functions
+ 
+ ---------------------
+ 
++.. function:: int *gs_query_dmabuf_modifiers(uint32_t drm_format, uint64_t **modifiers)
++
++   **Linux only:** Queries the supported DMA-BUF modifiers for a given format.
++
++   DMA-BUFs allow graphic cards to optimize storing or rendering by storing
++   the buffer content in custom layouts. These layouts for a given format are
++   tracked by the modifier of the DMA-BUF. Since these layouts are a hardware
++   feature, it's up to the used graphics card and the used graphics api which
++   modifiers are supported for a given format.
++
++   This function queries all supported modifiers for a format, stores them
++   as an array and returns the number of supported modifiers.
++
++   The caller of this function is required to free the array.
++
++   Note: DRM_FORMAT_MOD_INVALID is used as a token marking the support for
++   implicit modifiers.
++
++   :param drm_format:   DRM format of the DMA-BUF buffer
++   :param modifiers:    Pointer to receive an array of modifiers
++   :return:             The number of supported modifiers stored in modifiers or 0
++   :rtype:              int
++
++---------------------
++
+ .. function:: gs_texture_t *gs_texture_create_from_iosurface(void *iosurf)
+ 
+    **Mac only:** Creates a texture from an IOSurface.
+diff --git a/libobs-opengl/gl-nix.c b/libobs-opengl/gl-nix.c
+index aa93150a9..df0bc7b88 100644
+--- a/libobs-opengl/gl-nix.c
++++ b/libobs-opengl/gl-nix.c
+@@ -134,3 +134,11 @@ extern struct gs_texture *device_texture_create_from_dmabuf(
+ 		device, width, height, drm_format, color_format, n_planes, fds,
+ 		strides, offsets, modifiers);
+ }
++
++extern int device_query_dmabuf_modifiers(gs_device_t *device,
++					 uint32_t drm_format,
++					 uint64_t **modifiers)
++{
++	return gl_vtable->device_query_dmabuf_modifiers(device, drm_format,
++							modifiers);
++}
+diff --git a/libobs-opengl/gl-nix.h b/libobs-opengl/gl-nix.h
+index a772bb5f4..63626bb14 100644
+--- a/libobs-opengl/gl-nix.h
++++ b/libobs-opengl/gl-nix.h
+@@ -59,4 +59,8 @@ struct gl_winsys_vtable {
+ 		uint32_t drm_format, enum gs_color_format color_format,
+ 		uint32_t n_planes, const int *fds, const uint32_t *strides,
+ 		const uint32_t *offsets, const uint64_t *modifiers);
++
++	int (*device_query_dmabuf_modifiers)(gs_device_t *device,
++					     uint32_t drm_format,
++					     uint64_t **modifiers);
+ };
+diff --git a/libobs-opengl/gl-wayland-egl.c b/libobs-opengl/gl-wayland-egl.c
+index 724f89be3..86c127193 100644
+--- a/libobs-opengl/gl-wayland-egl.c
++++ b/libobs-opengl/gl-wayland-egl.c
+@@ -340,6 +340,16 @@ static struct gs_texture *gl_wayland_egl_device_texture_create_from_dmabuf(
+ 					  fds, strides, offsets, modifiers);
+ }
+ 
++static int gl_wayland_egl_device_query_dmabuf_modifiers(gs_device_t *device,
++							uint32_t drm_format,
++							uint64_t **modifiers)
++{
++	struct gl_platform *plat = device->plat;
++
++	return gl_egl_query_dmabuf_modifiers(plat->display, drm_format,
++					     modifiers);
++}
++
+ static const struct gl_winsys_vtable egl_wayland_winsys_vtable = {
+ 	.windowinfo_create = gl_wayland_egl_windowinfo_create,
+ 	.windowinfo_destroy = gl_wayland_egl_windowinfo_destroy,
+@@ -357,6 +367,8 @@ static const struct gl_winsys_vtable egl_wayland_winsys_vtable = {
+ 	.device_present = gl_wayland_egl_device_present,
+ 	.device_texture_create_from_dmabuf =
+ 		gl_wayland_egl_device_texture_create_from_dmabuf,
++	.device_query_dmabuf_modifiers =
++		gl_wayland_egl_device_query_dmabuf_modifiers,
+ };
+ 
+ const struct gl_winsys_vtable *gl_wayland_egl_get_winsys_vtable(void)
+diff --git a/libobs-opengl/gl-x11-egl.c b/libobs-opengl/gl-x11-egl.c
+index 295540fa0..b6bbed247 100644
+--- a/libobs-opengl/gl-x11-egl.c
++++ b/libobs-opengl/gl-x11-egl.c
+@@ -648,6 +648,16 @@ static struct gs_texture *gl_x11_egl_device_texture_create_from_dmabuf(
+ 					  fds, strides, offsets, modifiers);
+ }
+ 
++static int gl_x11_egl_device_query_dmabuf_modifiers(gs_device_t *device,
++						    uint32_t drm_format,
++						    uint64_t **modifiers)
++{
++	struct gl_platform *plat = device->plat;
++
++	return gl_egl_query_dmabuf_modifiers(plat->edisplay, drm_format,
++					     modifiers);
++}
++
+ static const struct gl_winsys_vtable egl_x11_winsys_vtable = {
+ 	.windowinfo_create = gl_x11_egl_windowinfo_create,
+ 	.windowinfo_destroy = gl_x11_egl_windowinfo_destroy,
+@@ -665,6 +675,8 @@ static const struct gl_winsys_vtable egl_x11_winsys_vtable = {
+ 	.device_present = gl_x11_egl_device_present,
+ 	.device_texture_create_from_dmabuf =
+ 		gl_x11_egl_device_texture_create_from_dmabuf,
++	.device_query_dmabuf_modifiers =
++		gl_x11_egl_device_query_dmabuf_modifiers,
+ };
+ 
+ const struct gl_winsys_vtable *gl_x11_egl_get_winsys_vtable(void)
+diff --git a/libobs-opengl/gl-x11-glx.c b/libobs-opengl/gl-x11-glx.c
+index 13a4ce362..4877fe7b0 100644
+--- a/libobs-opengl/gl-x11-glx.c
++++ b/libobs-opengl/gl-x11-glx.c
+@@ -599,6 +599,17 @@ static struct gs_texture *gl_x11_glx_device_texture_create_from_dmabuf(
+ 	return NULL;
+ }
+ 
++static int gl_x11_glx_device_query_dmabuf_modifiers(gs_device_t *device,
++						    uint32_t drm_format,
++						    uint64_t **modifiers)
++{
++	UNUSED_PARAMETER(device);
++	UNUSED_PARAMETER(drm_format);
++	UNUSED_PARAMETER(modifiers);
++
++	return 0;
++}
++
+ static const struct gl_winsys_vtable glx_winsys_vtable = {
+ 	.windowinfo_create = gl_x11_glx_windowinfo_create,
+ 	.windowinfo_destroy = gl_x11_glx_windowinfo_destroy,
+@@ -616,6 +627,8 @@ static const struct gl_winsys_vtable glx_winsys_vtable = {
+ 	.device_present = gl_x11_glx_device_present,
+ 	.device_texture_create_from_dmabuf =
+ 		gl_x11_glx_device_texture_create_from_dmabuf,
++	.device_query_dmabuf_modifiers =
++		gl_x11_glx_device_query_dmabuf_modifiers,
+ };
+ 
+ const struct gl_winsys_vtable *gl_x11_glx_get_winsys_vtable(void)
+diff --git a/libobs/graphics/device-exports.h b/libobs/graphics/device-exports.h
+index 5ea55e71c..e84fe7994 100644
+--- a/libobs/graphics/device-exports.h
++++ b/libobs/graphics/device-exports.h
+@@ -178,6 +178,10 @@ EXPORT gs_texture_t *device_texture_create_from_dmabuf(
+ 	uint32_t n_planes, const int *fds, const uint32_t *strides,
+ 	const uint32_t *offsets, const uint64_t *modifiers);
+ 
++EXPORT int device_query_dmabuf_modifiers(gs_device_t *device,
++					 uint32_t drm_format,
++					 uint64_t **modifiers);
++
+ #endif
+ 
+ #ifdef __cplusplus
+diff --git a/libobs/graphics/graphics-imports.c b/libobs/graphics/graphics-imports.c
+index 22131581b..e2597a9a7 100644
+--- a/libobs/graphics/graphics-imports.c
++++ b/libobs/graphics/graphics-imports.c
+@@ -225,6 +225,7 @@ bool load_graphics_imports(struct gs_exports *exports, void *module,
+ 	GRAPHICS_IMPORT_OPTIONAL(device_unregister_loss_callbacks);
+ #elif __linux__
+ 	GRAPHICS_IMPORT(device_texture_create_from_dmabuf);
++	GRAPHICS_IMPORT(device_query_dmabuf_modifiers);
+ #endif
+ 
+ 	return success;
+diff --git a/libobs/graphics/graphics-internal.h b/libobs/graphics/graphics-internal.h
+index afa356fb1..642fdf360 100644
+--- a/libobs/graphics/graphics-internal.h
++++ b/libobs/graphics/graphics-internal.h
+@@ -333,6 +333,9 @@ struct gs_exports {
+ 		uint32_t drm_format, enum gs_color_format color_format,
+ 		uint32_t n_planes, const int *fds, const uint32_t *strides,
+ 		const uint32_t *offsets, const uint64_t *modifiers);
++	int (*device_query_dmabuf_modifiers)(gs_device_t *device,
++					     uint32_t drm_format,
++					     uint64_t **modifiers);
+ #endif
+ };
+ 
+diff --git a/libobs/graphics/graphics.c b/libobs/graphics/graphics.c
+index 4f3ee8905..888bb76db 100644
+--- a/libobs/graphics/graphics.c
++++ b/libobs/graphics/graphics.c
+@@ -1383,6 +1383,14 @@ gs_texture_t *gs_texture_create_from_dmabuf(
+ 		n_planes, fds, strides, offsets, modifiers);
+ }
+ 
++int gs_query_dmabuf_modifiers(uint32_t drm_format, uint64_t **modifiers)
++{
++	graphics_t *graphics = thread_graphics;
++
++	return graphics->exports.device_query_dmabuf_modifiers(
++		graphics->device, drm_format, modifiers);
++}
++
+ #endif
+ 
+ gs_texture_t *gs_cubetexture_create(uint32_t size,
+diff --git a/libobs/graphics/graphics.h b/libobs/graphics/graphics.h
+index 9a532e043..0e51d5865 100644
+--- a/libobs/graphics/graphics.h
++++ b/libobs/graphics/graphics.h
+@@ -932,6 +932,8 @@ EXPORT gs_texture_t *gs_texture_create_from_dmabuf(
+ 	const uint32_t *strides, const uint32_t *offsets,
+ 	const uint64_t *modifiers);
+ 
++EXPORT int gs_query_dmabuf_modifiers(uint32_t drm_format, uint64_t **modifiers);
++
+ #endif
+ 
+ /* inline functions used by modules */
+-- 
+2.33.0
+
+From e22bc69ddbc2470f078b886682df089905b3c7ec Mon Sep 17 00:00:00 2001
+From: columbarius <co1umbarius@protonmail.com>
+Date: Thu, 16 Sep 2021 22:03:01 +0200
+Subject: [PATCH 5/5] linux-capture: Announce supported modifiers via PipeWire
+
+Sharing DMA-BUFs via PipeWire requires the client to announce all
+formats together with their supported modifiers. [1]
+
+[1] https://docs.pipewire.org/page_dma_buf.html
+---
+ plugins/linux-capture/pipewire.c | 159 +++++++++++++++++++++++++++----
+ 1 file changed, 140 insertions(+), 19 deletions(-)
+
+diff --git a/plugins/linux-capture/pipewire.c b/plugins/linux-capture/pipewire.c
+index 6ba101078..5c3d06ba6 100644
+--- a/plugins/linux-capture/pipewire.c
++++ b/plugins/linux-capture/pipewire.c
+@@ -60,6 +60,13 @@
+ 	fourcc_code('A', 'B', '2', \
+ 		    '4') /* [31:0] A:B:G:R 8:8:8:8 little endian */
+ 
++struct modifier_info {
++	uint32_t spa_format;
++	uint32_t drm_format;
++	int32_t n_modifiers;
++	uint64_t *modifiers;
++};
++
+ struct _obs_pipewire_data {
+ 	GCancellable *cancellable;
+ 
+@@ -104,6 +111,9 @@ struct _obs_pipewire_data {
+ 	enum obs_pw_capture_type capture_type;
+ 	struct obs_video_info video_info;
+ 	bool negotiated;
++
++	int n_formats;
++	struct modifier_info *modifier_info;
+ };
+ 
+ struct dbus_call_data {
+@@ -343,6 +353,124 @@ static void swap_texture_red_blue(gs_texture_t *texture)
+ 	glBindTexture(GL_TEXTURE_2D, 0);
+ }
+ 
++static inline struct spa_pod *build_format(struct spa_pod_builder *b,
++					   struct obs_video_info *ovi,
++					   uint32_t format, uint64_t *modifiers,
++					   size_t modifier_count)
++{
++	uint32_t i, c;
++	struct spa_pod_frame f[2];
++
++	/* make an object of type SPA_TYPE_OBJECT_Format and id SPA_PARAM_EnumFormat.
++	 * The object type is important because it defines the properties that are
++	 * acceptable. The id gives more context about what the object is meant to
++	 * contain. In this case we enumerate supported formats. */
++	spa_pod_builder_push_object(b, &f[0], SPA_TYPE_OBJECT_Format,
++				    SPA_PARAM_EnumFormat);
++	/* add media type and media subtype properties */
++	spa_pod_builder_prop(b, SPA_FORMAT_mediaType, 0);
++	spa_pod_builder_id(b, SPA_MEDIA_TYPE_video);
++	spa_pod_builder_prop(b, SPA_FORMAT_mediaSubtype, 0);
++	spa_pod_builder_id(b, SPA_MEDIA_SUBTYPE_raw);
++
++	/* formats */
++	spa_pod_builder_prop(b, SPA_FORMAT_VIDEO_format, 0);
++	spa_pod_builder_id(b, format);
++
++	/* modifier */
++	if (modifier_count > 0) {
++		/* build an enumeration of modifiers */
++		spa_pod_builder_prop(b, SPA_FORMAT_VIDEO_modifier,
++				     SPA_POD_PROP_FLAG_MANDATORY |
++					     SPA_POD_PROP_FLAG_DONT_FIXATE);
++		spa_pod_builder_push_choice(b, &f[1], SPA_CHOICE_Enum, 0);
++		/* modifiers from  an array */
++		for (i = 0, c = 0; i < modifier_count; i++) {
++			uint64_t modifier = modifiers[i];
++			spa_pod_builder_long(b, modifier);
++			if (c++ == 0)
++				spa_pod_builder_long(b, modifier);
++		}
++		spa_pod_builder_pop(b, &f[1]);
++	}
++	/* add size and framerate ranges */
++	spa_pod_builder_add(b, SPA_FORMAT_VIDEO_size,
++			    SPA_POD_CHOICE_RANGE_Rectangle(
++				    &SPA_RECTANGLE(320, 240), // Arbitrary
++				    &SPA_RECTANGLE(1, 1),
++				    &SPA_RECTANGLE(8192, 4320)),
++			    SPA_FORMAT_VIDEO_framerate,
++			    SPA_POD_CHOICE_RANGE_Fraction(
++				    &SPA_FRACTION(ovi->fps_num, ovi->fps_den),
++				    &SPA_FRACTION(0, 1), &SPA_FRACTION(360, 1)),
++			    0);
++	return spa_pod_builder_pop(b, &f[0]);
++}
++
++static uint32_t build_format_params(obs_pipewire_data *obs_pw,
++				    struct spa_pod_builder *pod_builder,
++				    const struct spa_pod ***param_list)
++{
++	uint32_t n_params = 0;
++
++	const struct spa_pod **params;
++	params = bzalloc(2 * obs_pw->n_formats * sizeof(struct spa_pod *));
++
++	for (int i = 0; i < obs_pw->n_formats; i++) {
++		if (obs_pw->modifier_info[i].n_modifiers == 0) {
++			continue;
++		}
++		params[n_params++] =
++			build_format(pod_builder, &obs_pw->video_info,
++				     obs_pw->modifier_info[i].spa_format,
++				     obs_pw->modifier_info[i].modifiers,
++				     obs_pw->modifier_info[i].n_modifiers);
++	}
++	for (int i = 0; i < obs_pw->n_formats; i++) {
++		params[n_params++] = build_format(
++			pod_builder, &obs_pw->video_info,
++			obs_pw->modifier_info[i].spa_format, NULL, 0);
++	}
++	*param_list = params;
++	return n_params;
++}
++
++static uint32_t create_modifier_info(struct modifier_info **modifier_info)
++{
++	uint32_t formats[] = {
++		SPA_VIDEO_FORMAT_BGRA,
++		SPA_VIDEO_FORMAT_RGBA,
++		SPA_VIDEO_FORMAT_BGRx,
++		SPA_VIDEO_FORMAT_RGBx,
++	};
++
++	int32_t n_formats = sizeof(formats) / sizeof(formats[0]);
++
++	struct modifier_info *info =
++		bzalloc(n_formats * sizeof(struct modifier_info));
++	obs_enter_graphics();
++	for (int i = 0; i < n_formats; i++) {
++		info[i].spa_format = formats[i];
++		spa_pixel_format_to_drm_format(formats[i], &info[i].drm_format);
++		info[i].n_modifiers = gs_query_dmabuf_modifiers(
++			info[i].drm_format, &info[i].modifiers);
++	}
++	obs_leave_graphics();
++
++	*modifier_info = info;
++	return n_formats;
++}
++
++static void destroy_modifier_info(int32_t n_formats,
++				  struct modifier_info *modifier_info)
++{
++	for (int i = 0; i < n_formats; i++) {
++		bfree(modifier_info[i].modifiers);
++		modifier_info[i].modifiers = NULL;
++		modifier_info[i].n_modifiers = 0;
++	}
++	bfree(modifier_info);
++}
+ /* ------------------------------------------------- */
+ 
+ static void on_process_cb(void *user_data)
+@@ -626,8 +754,9 @@ static const struct pw_core_events core_events = {
+ static void play_pipewire_stream(obs_pipewire_data *obs_pw)
+ {
+ 	struct spa_pod_builder pod_builder;
+-	const struct spa_pod *params[1];
+-	uint8_t params_buffer[1024];
++	const struct spa_pod **params = NULL;
++	uint32_t n_params;
++	uint8_t params_buffer[2048];
+ 	struct obs_video_info ovi;
+ 
+ 	obs_pw->thread_loop = pw_thread_loop_new("PipeWire thread loop", NULL);
+@@ -669,32 +798,20 @@ static void play_pipewire_stream(obs_pipewire_data *obs_pw)
+ 		SPA_POD_BUILDER_INIT(params_buffer, sizeof(params_buffer));
+ 
+ 	obs_get_video_info(&ovi);
+-	params[0] = spa_pod_builder_add_object(
+-		&pod_builder, SPA_TYPE_OBJECT_Format, SPA_PARAM_EnumFormat,
+-		SPA_FORMAT_mediaType, SPA_POD_Id(SPA_MEDIA_TYPE_video),
+-		SPA_FORMAT_mediaSubtype, SPA_POD_Id(SPA_MEDIA_SUBTYPE_raw),
+-		SPA_FORMAT_VIDEO_format,
+-		SPA_POD_CHOICE_ENUM_Id(
+-			4, SPA_VIDEO_FORMAT_BGRA, SPA_VIDEO_FORMAT_RGBA,
+-			SPA_VIDEO_FORMAT_BGRx, SPA_VIDEO_FORMAT_RGBx),
+-		SPA_FORMAT_VIDEO_size,
+-		SPA_POD_CHOICE_RANGE_Rectangle(
+-			&SPA_RECTANGLE(320, 240), // Arbitrary
+-			&SPA_RECTANGLE(1, 1), &SPA_RECTANGLE(8192, 4320)),
+-		SPA_FORMAT_VIDEO_framerate,
+-		SPA_POD_CHOICE_RANGE_Fraction(
+-			&SPA_FRACTION(ovi.fps_num, ovi.fps_den),
+-			&SPA_FRACTION(0, 1), &SPA_FRACTION(360, 1)));
++
+ 	obs_pw->video_info = ovi;
+ 
++	n_params = build_format_params(obs_pw, &pod_builder, &params);
++
+ 	pw_stream_connect(
+ 		obs_pw->stream, PW_DIRECTION_INPUT, obs_pw->pipewire_node,
+ 		PW_STREAM_FLAG_AUTOCONNECT | PW_STREAM_FLAG_MAP_BUFFERS, params,
+-		1);
++		n_params);
+ 
+ 	blog(LOG_INFO, "[pipewire] playing stream…");
+ 
+ 	pw_thread_loop_unlock(obs_pw->thread_loop);
++	bfree(params);
+ }
+ 
+ /* ------------------------------------------------- */
+@@ -1127,6 +1244,8 @@ void *obs_pipewire_create(enum obs_pw_capture_type capture_type,
+ 	if (!init_obs_pipewire(obs_pw))
+ 		g_clear_pointer(&obs_pw, bfree);
+ 
++	obs_pw->n_formats = create_modifier_info(&obs_pw->modifier_info);
++
+ 	return obs_pw;
+ }
+ 
+@@ -1138,6 +1257,8 @@ void obs_pipewire_destroy(obs_pipewire_data *obs_pw)
+ 	teardown_pipewire(obs_pw);
+ 	destroy_session(obs_pw);
+ 
++	destroy_modifier_info(obs_pw->n_formats, obs_pw->modifier_info);
++
+ 	bfree(obs_pw);
+ }
+ 
+-- 
+2.33.0
+
