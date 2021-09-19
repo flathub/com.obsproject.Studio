@@ -323,6 +323,10 @@
                 {
                     "type": "patch",
                     "path": "linux-capture-Lookup-session-handle-without-typechec.patch"
+                },
+                {
+                    "type": "patch",
+                    "path": "obs-pipewire-modifiers.patch"
                 }
             ]
         }
