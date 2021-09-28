@@ -301,8 +301,7 @@
                 "-DENABLE_PULSEAUDIO=ON",
                 "-DENABLE_PIPEWIRE=ON",
                 "-DWITH_RTMPS=ON",
-                "-DRELEASE_CANDIDATE=27.1.0-rc3",
-                "-DOBS_VERSION_OVERRIDE=27.1.0-rc3"
+                "-DOBS_VERSION_OVERRIDE=27.1.0"
             ],
             "post-install": [
                 "install -d /app/plugins",
@@ -317,12 +316,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/obsproject/obs-studio.git",
-                    "tag": "27.1.0-rc3",
-                    "commit": "a73586b8b1b51f590f353d4befbc7f888ecfd06c"
-                },
-                {
-                    "type": "patch",
-                    "path": "linux-capture-Lookup-session-handle-without-typechec.patch"
+                    "tag": "27.1.0",
+                    "commit": "698ed548700790294da579e20553e8af0e23d51d"
                 }
             ]
         }
