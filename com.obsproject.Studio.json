@@ -255,8 +255,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/ARMmbed/mbedtls.git",
-                    "commit": "1c54b5410fd48d6bcada97e30cac417c5c7eea67",
-                    "tag": "v2.25.0"
+                    "commit": "f71e2878084126737cc39083e1e15afc459bd93d",
+                    "tag": "v2.27.0"
                 }
             ]
         },
