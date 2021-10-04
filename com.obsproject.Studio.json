@@ -150,8 +150,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/Haivision/srt.git",
-                    "tag": "v1.4.3",
-                    "commit": "291e010fbf91b13b92e1cde5dcb824a9d7f4e353",
+                    "tag": "v1.4.4",
+                    "commit": "8b32f3734ff6af7cc7b0fef272591cb80a2d1aae",
                     "x-checker-data": {
                         "type": "git",
                         "tag-pattern": "^v([\\d.]+)$"
