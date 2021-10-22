@@ -2,7 +2,7 @@
     "app-id": "com.obsproject.Studio",
     "default-branch": "stable",
     "runtime": "org.kde.Platform",
-    "runtime-version": "5.15",
+    "runtime-version": "5.15-21.08",
     "sdk": "org.kde.Sdk",
     "command": "obs",
     "finish-args": [
@@ -54,7 +54,7 @@
         },
         "org.freedesktop.LinuxAudio.Plugins": {
             "directory": "extensions/Plugins",
-            "version": "20.08",
+            "version": "21.08",
             "add-ld-path": "lib",
             "merge-dirs": "lxvst",
             "subdirectories": true,
@@ -102,8 +102,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.20.0.tar.bz2",
-                    "sha256": "956118713f7ccb405c55c7088a6a2490c32d54300dd9a30d8d5008c28d3726f7",
+                    "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.22.0.tar.bz2",
+                    "sha256": "1069e5d7909bcc563baeaadc3a5c496f0e658524c413cf7818816e37bfcea344",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 9998,
@@ -255,8 +255,8 @@
                 {
                     "type": "git",
                     "url": "https://github.com/ARMmbed/mbedtls.git",
-                    "commit": "1c54b5410fd48d6bcada97e30cac417c5c7eea67",
-                    "tag": "v2.25.0"
+                    "commit": "f71e2878084126737cc39083e1e15afc459bd93d",
+                    "tag": "v2.27.0"
                 }
             ]
         },
