@@ -102,8 +102,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.22.0.tar.bz2",
-                    "sha256": "1069e5d7909bcc563baeaadc3a5c496f0e658524c413cf7818816e37bfcea344",
+                    "url": "https://linuxtv.org/downloads/v4l-utils/v4l-utils-1.22.1.tar.bz2",
+                    "sha256": "65c6fbe830a44ca105c443b027182c1b2c9053a91d1e72ad849dfab388b94e31",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 9998,
