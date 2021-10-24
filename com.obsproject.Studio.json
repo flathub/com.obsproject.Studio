@@ -315,9 +315,9 @@
             "sources": [
                 {
                     "type": "git",
-                    "url": "https://github.com/obsproject/obs-studio.git",
-                    "tag": "27.1.3",
-                    "commit": "3c14e4ece250a862a5fa62aa7e85f476f7545ca4"
+                    "url": "https://github.com/columbarius/obs-studio.git",
+                    "branch": "dev-stable",
+                    "commit": "08503162923035bdc0de078c9c1a48e3d74c914c"
                 }
             ]
         }
