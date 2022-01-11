@@ -82,7 +82,7 @@
                     "type": "git",
                     "url": "https://code.videolan.org/videolan/x264.git",
                     "branch": "master",
-                    "commit": "d9a19f0dc7a7328809840f8d6e8d223269301bed"
+                    "commit": "19856cc41ad11e434549fb3cc6a019e645ce1efe"
                 }
             ]
         },
@@ -125,8 +125,8 @@
                 {
                     "type": "git",
                     "url": "https://git.videolan.org/git/ffmpeg/nv-codec-headers.git",
-                    "commit": "b641a195edbe3ac9788e681e22c2e2fad8aacddb",
-                    "tag": "n11.1.5.0",
+                    "commit": "84483da70d903239d4536763fde8c7e6c4e80784",
+                    "tag": "n11.1.5.1",
                     "x-checker-data": {
                         "type": "git",
                         "tag-pattern": "^n([\\d.]+)$"
